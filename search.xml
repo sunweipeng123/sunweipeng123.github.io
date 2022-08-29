@@ -19,6 +19,23 @@
 ]]></content>
   </entry>
   <entry>
+    <title>hexo发文</title>
+    <url>/2022/08/29/hexo%E5%8F%91%E6%96%87/</url>
+    <content><![CDATA[<p>1、 新建一篇文章</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">在hexo博客目录下，进入Git Bash命令窗口中，输入以下命令：</span><br><span class="line">hexo new &quot;在这里&quot;</span><br><span class="line">在博客目录下的/source/_posts/ 文件夹下，可以看到已经生成了标题为(在这里.md)的博客文件</span><br></pre></td></tr></table></figure>
+<p>2、给文章添加分类和标签</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">在（在这里.md）文件中设置tags和categories属性:</span><br><span class="line">title: 在这里</span><br><span class="line">date: 2018-08-02 11:41:10</span><br><span class="line">tags:</span><br><span class="line">- 博客           //多个标签可以这样添加</span><br><span class="line">- hexo</span><br><span class="line">categories: web前端</span><br></pre></td></tr></table></figure>
+<p>3、发布到Github上</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hexo clean &amp;&amp; hexo g &amp;&amp; hexo d</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>hexo发表文章</category>
+      </categories>
+      <tags>
+        <tag>博客</tag>
+        <tag>hexo</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>myMd</title>
     <url>/2022/07/29/myMd/</url>
     <content><![CDATA[<h1 id="this-is-my-markdown-file"><a href="#this-is-my-markdown-file" class="headerlink" title="this is my markdown file"></a>this is my markdown file</h1><p>这是一个md文件</p>
