@@ -20,27 +20,28 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"sunweipeng123.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.12.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="this is my markdown file这是一个md文件">
+    <meta name="description" content="迭代数组1234567891011121314151617181920212223242526272829&#x2F;&#x2F;迭代数组        var something &#x3D; (function(array)&amp;#123;            var arr &#x3D; array		&#x2F;&#x2F;数组            var nextVal;	&#x2F;&#x2F;遍历的下个值            var i &#x3D; 0;		&#x2F;&#x2F;用作数">
 <meta property="og:type" content="article">
-<meta property="og:title" content="myMd">
-<meta property="og:url" content="https://sunweipeng123.github.io/2022/07/29/myMd/index.html">
+<meta property="og:title" content="迭代器实现array和对象遍历">
+<meta property="og:url" content="https://sunweipeng123.github.io/2022/10/29/%E8%BF%AD%E4%BB%A3%E5%99%A8/index.html">
 <meta property="og:site_name" content="视野所及，唯有前端">
-<meta property="og:description" content="this is my markdown file这是一个md文件">
+<meta property="og:description" content="迭代数组1234567891011121314151617181920212223242526272829&#x2F;&#x2F;迭代数组        var something &#x3D; (function(array)&amp;#123;            var arr &#x3D; array		&#x2F;&#x2F;数组            var nextVal;	&#x2F;&#x2F;遍历的下个值            var i &#x3D; 0;		&#x2F;&#x2F;用作数">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2022-07-29T15:52:27.000Z">
-<meta property="article:modified_time" content="2022-07-29T15:55:09.660Z">
+<meta property="article:published_time" content="2022-10-29T05:29:45.000Z">
+<meta property="article:modified_time" content="2022-11-11T09:34:17.817Z">
 <meta property="article:author" content="sunweipeng">
+<meta property="article:tag" content="javascript">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://sunweipeng123.github.io/2022/07/29/myMd/">
+<link rel="canonical" href="https://sunweipeng123.github.io/2022/10/29/%E8%BF%AD%E4%BB%A3%E5%99%A8/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://sunweipeng123.github.io/2022/07/29/myMd/","path":"2022/07/29/myMd/","title":"myMd"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://sunweipeng123.github.io/2022/10/29/%E8%BF%AD%E4%BB%A3%E5%99%A8/","path":"2022/10/29/迭代器/","title":"迭代器实现array和对象遍历"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>myMd | 视野所及，唯有前端</title>
+<title>迭代器实现array和对象遍历 | 视野所及，唯有前端</title>
   
 
 
@@ -143,7 +144,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#this-is-my-markdown-file"><span class="nav-number">1.</span> <span class="nav-text">this is my markdown file</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text"></span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%AD%E4%BB%A3%E6%95%B0%E7%BB%84"><span class="nav-number">1.0.1.</span> <span class="nav-text">迭代数组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%AD%E4%BB%A3%E5%AF%B9%E8%B1%A1"><span class="nav-number">1.0.2.</span> <span class="nav-text">迭代对象</span></a></li></ol></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -158,13 +159,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-count">9</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-count">3</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
@@ -213,7 +214,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://sunweipeng123.github.io/2022/07/29/myMd/">
+    <link itemprop="mainEntityOfPage" href="https://sunweipeng123.github.io/2022/10/29/%E8%BF%AD%E4%BB%A3%E5%99%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -226,12 +227,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="myMd | 视野所及，唯有前端">
+      <meta itemprop="name" content="迭代器实现array和对象遍历 | 视野所及，唯有前端">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          myMd
+          迭代器实现array和对象遍历
         </h1>
 
         <div class="post-meta-container">
@@ -241,9 +242,24 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2022-07-29 23:52:27 / 修改时间：23:55:09" itemprop="dateCreated datePublished" datetime="2022-07-29T23:52:27+08:00">2022-07-29</time>
+      <time title="创建时间：2022-10-29 13:29:45" itemprop="dateCreated datePublished" datetime="2022-10-29T13:29:45+08:00">2022-10-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-11-11 17:34:17" itemprop="dateModified" datetime="2022-11-11T17:34:17+08:00">2022-11-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%89%8D%E7%AB%AF/" itemprop="url" rel="index"><span itemprop="name">前端</span></a>
+        </span>
     </span>
 
   
@@ -260,7 +276,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>28</span>
+      <span>1.2k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
@@ -278,8 +294,9 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h1 id="this-is-my-markdown-file"><a href="#this-is-my-markdown-file" class="headerlink" title="this is my markdown file"></a>this is my markdown file</h1><p>这是一个md文件</p>
+        <h1 id=""><a href="#" class="headerlink" title=""></a></h1><h3 id="迭代数组"><a href="#迭代数组" class="headerlink" title="迭代数组"></a>迭代数组</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//迭代数组</span></span><br><span class="line">        <span class="keyword">var</span> something = (<span class="keyword">function</span>(<span class="params">array</span>)&#123;</span><br><span class="line">            <span class="keyword">var</span> arr = array		<span class="comment">//数组</span></span><br><span class="line">            <span class="keyword">var</span> nextVal;	<span class="comment">//遍历的下个值</span></span><br><span class="line">            <span class="keyword">var</span> i = <span class="number">0</span>;		<span class="comment">//用作数组索引</span></span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span> &#123;</span><br><span class="line">                [<span class="title class_">Symbol</span>.<span class="property">iterator</span>]:<span class="keyword">function</span>(<span class="params"></span>)&#123;</span><br><span class="line">                    <span class="keyword">return</span> <span class="variable language_">this</span>;</span><br><span class="line">                &#125;,</span><br><span class="line"></span><br><span class="line">                <span class="attr">next</span>:<span class="keyword">function</span>(<span class="params"></span>)&#123;</span><br><span class="line">                    <span class="keyword">var</span> done = <span class="literal">false</span>;</span><br><span class="line">                    <span class="keyword">if</span>(i &lt; arr.<span class="property">length</span>)&#123;</span><br><span class="line">                        nextVal = array[i];</span><br><span class="line">                    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                        done = <span class="literal">true</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                        </span><br><span class="line">                    </span><br><span class="line">                    i++</span><br><span class="line">                    <span class="keyword">return</span> &#123;<span class="attr">done</span>:done, <span class="attr">value</span>:nextVal&#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;)([<span class="number">10</span>,<span class="number">50</span>,<span class="number">99</span>,-<span class="number">1</span>])	<span class="comment">//传入数组</span></span><br><span class="line">		<span class="comment">//进行迭代</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">let</span> j <span class="keyword">of</span> something)&#123;</span><br><span class="line">            <span class="variable language_">console</span>.<span class="title function_">log</span>(j)</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
 
+<h3 id="迭代对象"><a href="#迭代对象" class="headerlink" title="迭代对象"></a>迭代对象</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//迭代对象</span></span><br><span class="line">        <span class="keyword">var</span> person = &#123;</span><br><span class="line">            <span class="attr">name</span>:<span class="string">&#x27;zhangs&#x27;</span>,</span><br><span class="line">            <span class="attr">age</span>:<span class="number">18</span>,</span><br><span class="line">            <span class="attr">sex</span>:<span class="string">&#x27;male&#x27;</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">var</span> another = (<span class="keyword">function</span>(<span class="params">obj</span>)&#123;</span><br><span class="line">            <span class="keyword">var</span> obj = obj;	<span class="comment">//对象</span></span><br><span class="line">            <span class="keyword">var</span> nextVal;	<span class="comment">//遍历的下一个值</span></span><br><span class="line">            <span class="keyword">var</span> propertyList = <span class="title class_">Object</span>.<span class="title function_">keys</span>(obj);	<span class="comment">//获取所有键，并以数组形式返回</span></span><br><span class="line">            <span class="keyword">var</span> i = <span class="number">0</span>;	<span class="comment">//数组见的索引</span></span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span> &#123;</span><br><span class="line">                [<span class="title class_">Symbol</span>.<span class="property">iterator</span>]:<span class="keyword">function</span>(<span class="params"></span>)&#123;<span class="keyword">return</span> <span class="variable language_">this</span>&#125;,</span><br><span class="line">                <span class="attr">next</span>:<span class="keyword">function</span>(<span class="params"></span>)&#123;</span><br><span class="line">                    <span class="keyword">var</span> done = <span class="literal">false</span></span><br><span class="line">                    <span class="keyword">if</span>(i &lt; propertyList.<span class="property">length</span>)&#123;</span><br><span class="line">                        <span class="comment">//每对键值都是一个对象</span></span><br><span class="line">                        nextVal = &#123;&#125;</span><br><span class="line">                        <span class="keyword">var</span> proName = propertyList[i]</span><br><span class="line">                        nextVal[proName] = obj[propertyList[i]]</span><br><span class="line">                    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                        done = <span class="literal">true</span></span><br><span class="line">                    &#125;</span><br><span class="line">                    i++</span><br><span class="line">                    <span class="keyword">return</span> &#123;<span class="attr">done</span>:done,<span class="attr">value</span>:nextVal&#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;)(person)	<span class="comment">//传入对象</span></span><br><span class="line">   		<span class="comment">//进行迭代</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">let</span> j <span class="keyword">of</span> another)&#123;</span><br><span class="line">            <span class="variable language_">console</span>.<span class="title function_">log</span>(j)</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">let</span> j <span class="keyword">of</span> another)&#123;</span><br><span class="line">            <span class="variable language_">console</span>.<span class="title function_">log</span>(j)</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
     </div>
 
     <div>
@@ -304,7 +321,7 @@
   </li>
   <li class="post-copyright-link">
       <strong>本文链接：</strong>
-      <a href="https://sunweipeng123.github.io/2022/07/29/myMd/" title="myMd">https://sunweipeng123.github.io/2022/07/29/myMd/</a>
+      <a href="https://sunweipeng123.github.io/2022/10/29/%E8%BF%AD%E4%BB%A3%E5%99%A8/" title="迭代器实现array和对象遍历">https://sunweipeng123.github.io/2022/10/29/迭代器/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -312,18 +329,21 @@
 </ul>
 </div>
 
+          <div class="post-tags">
+              <a href="/tags/javascript/" rel="tag"># javascript</a>
+          </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2022/07/29/hello-world/" rel="prev" title="Hello World">
-                  <i class="fa fa-chevron-left"></i> Hello World
+                <a href="/2022/10/29/%E4%BD%A0%E6%89%80%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84this/" rel="prev" title="你所不知道的this">
+                  <i class="fa fa-chevron-left"></i> 你所不知道的this
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2022/07/30/%E5%9C%A8%E8%BF%99%E9%87%8C/" rel="next" title="在这里">
-                  在这里 <i class="fa fa-chevron-right"></i>
+                <a href="/2022/10/29/%E7%94%9F%E6%88%90%E5%99%A8%E5%92%8C%E5%BC%82%E6%AD%A5/" rel="next" title="生成器和异步">
+                  生成器和异步 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
           </div>
@@ -357,14 +377,14 @@
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">6k</span>
+    <span title="站点总字数">11k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">5 分钟</span>
+    <span title="站点阅读时长">10 分钟</span>
   </span>
 </div>
 <div class="busuanzi-count">
