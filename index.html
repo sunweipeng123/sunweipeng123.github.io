@@ -155,18 +155,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-count">10</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-count">4</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-count">7</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -200,6 +200,103 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://sunweipeng123.github.io/2022/11/19/tp6%E5%AE%9E%E7%8E%B0JWT/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="sunweipeng">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sunnylog">
+      <meta itemprop="description" content="经历一个过程然后成为更好的自己">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Sunnylog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/11/19/tp6%E5%AE%9E%E7%8E%B0JWT/" class="post-title-link" itemprop="url">tp6实现JWT</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2022-11-19 13:04:39 / 修改时间：13:07:02" itemprop="dateCreated datePublished" datetime="2022-11-19T13:04:39+08:00">2022-11-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%90%8E%E7%AB%AF/" itemprop="url" rel="index"><span itemprop="name">后端</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.1k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>1 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h3 id="composer安装JWT"><a href="#composer安装JWT" class="headerlink" title="composer安装JWT"></a>composer安装JWT</h3><h3 id="在controller的test-php中"><a href="#在controller的test-php中" class="headerlink" title="在controller的test.php中"></a>在controller的test.php中</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//引入token工具</span></span><br><span class="line"><span class="keyword">use</span> <span class="title">Firebase</span>\<span class="title">JWT</span>\<span class="title">JWT</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Firebase</span>\<span class="title">JWT</span>\<span class="title">Key</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="variable">$key</span> = <span class="string">&#x27;example_key&#x27;</span>;   <span class="comment">//这里填写你自己设置的密钥</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">//加密并返回token</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">generate</span>(<span class="params"><span class="variable">$userId</span></span>)</span>&#123;</span><br><span class="line">        <span class="variable">$payload</span> = [</span><br><span class="line">            <span class="string">&#x27;iss&#x27;</span> =&gt; <span class="string">&#x27;http://example.org&#x27;</span>,  <span class="comment">//jwt签发方，这个地方可以自定义</span></span><br><span class="line">            <span class="string">&#x27;aud&#x27;</span> =&gt; <span class="string">&#x27;http://example.com&#x27;</span>,  <span class="comment">//jwt接收方，这个地方可以自定义</span></span><br><span class="line">            <span class="string">&#x27;exp&#x27;</span> =&gt; <span class="title function_ invoke__">time</span>()+<span class="number">3600</span>*<span class="number">2</span>,         <span class="comment">//jwt的过期时间，过期时间必须大于签发时间</span></span><br><span class="line">            <span class="string">&#x27;iat&#x27;</span> =&gt; <span class="title function_ invoke__">time</span>(),            <span class="comment">//jwt的签发时间</span></span><br><span class="line">            <span class="string">&#x27;nbf&#x27;</span> =&gt; <span class="title function_ invoke__">time</span>(),             <span class="comment">//定义在什么时间之前，某个时间点后才能访问</span></span><br><span class="line">            <span class="string">&#x27;data&#x27;</span> =&gt; [</span><br><span class="line">                <span class="string">&#x27;userId&#x27;</span> =&gt; <span class="variable">$userId</span></span><br><span class="line">            ]</span><br><span class="line">        ];</span><br><span class="line"></span><br><span class="line">        <span class="variable">$token</span> = JWT::<span class="title function_ invoke__">encode</span>(<span class="variable">$payload</span>, <span class="variable">$this</span>-&gt;key, <span class="string">&#x27;HS256&#x27;</span>);        <span class="comment">//encode加密</span></span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$token</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//解密</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">parse</span>(<span class="params"><span class="variable">$token</span></span>)</span>&#123;</span><br><span class="line">        <span class="variable">$decoded</span> = JWT::<span class="title function_ invoke__">decode</span>(<span class="variable">$token</span>, <span class="keyword">new</span> <span class="title class_">Key</span>(<span class="variable">$this</span>-&gt;key, <span class="string">&#x27;HS256&#x27;</span>));   <span class="comment">//decode解密</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 如果用户的token解密后的一些数据(比如账号id)和前端登录保存在cookie里的账户id是吻合的，那么就说明是本人</span></span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$decoded</span>-&gt;data-&gt;userId;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">authToken</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="variable">$createToken</span> = <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">generate</span>(<span class="string">&#x27;zhangs&#x27;</span>);</span><br><span class="line">        <span class="keyword">echo</span> <span class="variable">$createToken</span>;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">&#x27;&lt;br&gt;&#x27;</span>;</span><br><span class="line">        <span class="variable">$token</span> = <span class="title class_">Request</span>::<span class="title function_ invoke__">get</span>(<span class="string">&#x27;token&#x27;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">echo</span> <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">parse</span>(<span class="variable">$token</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    <div>
+        
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1215,14 +1312,14 @@
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">11k</span>
+    <span title="站点总字数">13k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">10 分钟</span>
+    <span title="站点阅读时长">11 分钟</span>
   </span>
 </div>
 <div class="busuanzi-count">
