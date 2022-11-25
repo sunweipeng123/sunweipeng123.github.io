@@ -212,6 +212,58 @@
       </tags>
   </entry>
   <entry>
+    <title>对一道循环计数题进行解剖</title>
+    <url>/2022/11/25/%E5%AF%B9%E4%B8%80%E9%81%93%E5%BE%AA%E7%8E%AF%E8%AE%A1%E6%95%B0%E9%A2%98%E8%BF%9B%E8%A1%8C%E8%A7%A3%E5%89%96/</url>
+    <content><![CDATA[<p>题如下：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">//想要效果：在for循环内，使用setTimeout延迟两秒后，依次打印i的值：0，1，2，3，4</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>;i&lt;<span class="number">5</span>;i++)&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function">()=&gt;</span>&#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(i)</span><br><span class="line">    &#125;,<span class="number">2000</span>)</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上述代码最终的执行结果：延迟2秒后，在控制台中打印了五个5，这并不是我们预期想要的结果</p>
+<h3 id="这是为什么呢？进行分析："><a href="#这是为什么呢？进行分析：" class="headerlink" title="这是为什么呢？进行分析："></a>这是为什么呢？进行分析：</h3><ol>
+<li><p>这里的var声明不具备块级作用域，变量i被声明为全局变量</p>
+</li>
+<li><p>这段代码包含了同步代码和异步代码，为什么会产生异步，异步又如何执行</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">首先JS是在单线程的环境下工作的，为了避免某一段JavaScript代码长时间运行，阻塞后面代码执行，导致其他任务无法执行（例如：浏览器无响应、假死），JavaScript将任务的执行模式分成两种：同步和异步</span><br><span class="line"></span><br><span class="line">- 同步模式：在主线程（执行栈）排队等待的任务，只能等待前一个完成才会执行完毕后才会执行下一个任务</span><br><span class="line"></span><br><span class="line">- 异步模式：不进入主线程而进入”消息队列“的任务（异步任务），会在&quot;消息队列&quot;中排队等待，当主线程中的任务运行完了，才会从”消息队列“取出异步任务放到主线程执行，执行完主线程，又再从”消息队列“取出任务执行，如此反复（这就是常说的eventloop）</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h5 id="那又怎样才算异步任务，如何区分呢？"><a href="#那又怎样才算异步任务，如何区分呢？" class="headerlink" title="那又怎样才算异步任务，如何区分呢？"></a>那又怎样才算异步任务，如何区分呢？</h5><p>常见的异步任务有：Ajax请求、setTimeout、Promise.then等 （异步任务又细分为宏任务和微任务，这里就不细说了）</p>
+</li>
+</ol>
+<h3 id="那题中的代码执行顺序就可以这样解释："><a href="#那题中的代码执行顺序就可以这样解释：" class="headerlink" title="那题中的代码执行顺序就可以这样解释："></a>那题中的代码执行顺序就可以这样解释：</h3><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">开始进入for循环</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">在执行for内部时，setTimeout会被认为是异步任务，不会立即执行，而是推到消息队列排队等待，等待主线程的代码（同步代码）执行完后，再从消息队列出列，放到主线程去执行</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">主线程的代码：执行for循环这一块，当变量i不满足条件跳出循环时，也就是同步代码执行完毕的时候，此时的变量i的值为5</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">主线程代码执行完后开始执行异步的代码：setTimeout内的箭头函数</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">在执行箭头函数时，由于它内部并没有声明i变量，就会沿作用域链找，最终在全局作用域下，找到了变量i（i的值已经变为5了），每一次打印变量i时，都是在打印全局作用域下的i，也就是说它们共享同一个i，所以就打印了五个5</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h3><h5 id="一：使用闭包"><a href="#一：使用闭包" class="headerlink" title="一：使用闭包"></a>一：使用闭包</h5><p>闭包：由函数及声明该函数的词法环境组成，该环境包含了闭包函数创建时作用域内所有的局部变量，闭包维持了对它的词法环境的引用，简而言之，闭包能让我们从内部函数访问到外部函数的作用域</p>
+<p>举个例子：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">makeFunc</span>(<span class="params"></span>)&#123;</span><br><span class="line">    <span class="keyword">var</span> name = <span class="string">&quot;zhangs&quot;</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">displayName</span>(<span class="params"></span>)&#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(name)</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> displayName;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> myFunc = <span class="title function_">makeFunc</span>()</span><br><span class="line"><span class="title function_">myFunc</span>()</span><br><span class="line"><span class="comment">//执行结果：控制台打印了“zhangs”</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">makeFunc函数内有一个局部变量name和声明了一个displayName函数，并且makeFunc函数执行时，会返回displayName函数</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">myFunc就是在makeFunc执行后，接收了它的返回值，一个对displayName函数实例的引用</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">myFunc方法执行就是在执行displayName方法，那为什么console.log(name)，会输出zhangs呢？</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">进行分析：</span></span><br><span class="line"><span class="comment">按道理来说，makeFunc函数执行完后，它的局部变量name会被销毁才对，然而代码却按照预期执行。</span></span><br><span class="line"><span class="comment">原因就在于JavaScript中的函数会形成闭包，displayName就是一个闭包函数，displayName维持了对它的词法环境（变量name就存在其中）的引用，就算makeFunc执行完毕，它的局部变量name也不会被销毁，因为name被displayName引用了。</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>回到开头的循环计数题，我们就可以用闭包实现我们想要的效果</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>;i&lt;<span class="number">5</span>;i++)&#123;</span><br><span class="line">    </span><br><span class="line">    (<span class="keyword">function</span>(<span class="params">j</span>)&#123;</span><br><span class="line"></span><br><span class="line">        <span class="built_in">setTimeout</span>(<span class="function">()=&gt;</span>&#123;</span><br><span class="line">            <span class="variable language_">console</span>.<span class="title function_">log</span>(j)</span><br><span class="line">        &#125;,<span class="number">2000</span>)</span><br><span class="line"></span><br><span class="line">    &#125;)(i)</span><br><span class="line">        </span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="二：利用块级作用域（let）"><a href="#二：利用块级作用域（let）" class="headerlink" title="二：利用块级作用域（let）"></a>二：利用块级作用域（let）</h5><p>ES6新增的let具有块级作用域，也可以用它进行循环计数</p>
+<p>值得注意的是：const也具有块级作用域，但它不能用来计数（原因：const i &#x3D; 0，i的值不允许再改变，i相当于常量）</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="keyword">let</span> i=<span class="number">0</span>;i&lt;<span class="number">5</span>;i++)&#123;	<span class="comment">//此时用let声明的i不会成为全局变量，在外部无法访问到i</span></span><br><span class="line">    </span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function">()=&gt;</span>&#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(i)</span><br><span class="line">    &#125;,<span class="number">2000</span>)</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="总结：一道循环计算题涉及了以下知识："><a href="#总结：一道循环计算题涉及了以下知识：" class="headerlink" title="总结：一道循环计算题涉及了以下知识："></a>总结：一道循环计算题涉及了以下知识：</h3><ol>
+<li>var、let和const的区别</li>
+<li>同步模式、异步模式及异步代码如何执行</li>
+<li>闭包</li>
+</ol>
+]]></content>
+      <categories>
+        <category>前端</category>
+      </categories>
+      <tags>
+        <tag>javascript</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>对象关联和行为委托</title>
     <url>/2022/10/29/%E5%AF%B9%E8%B1%A1%E5%85%B3%E8%81%94%E5%92%8C%E8%A1%8C%E4%B8%BA%E5%A7%94%E6%89%98/</url>
     <content><![CDATA[<h1 id="对象关联和行为委托"><a href="#对象关联和行为委托" class="headerlink" title="对象关联和行为委托"></a>对象关联和行为委托</h1><h4 id="创建关联"><a href="#创建关联" class="headerlink" title="创建关联"></a>创建关联</h4><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> foo = &#123;</span><br><span class="line">    <span class="attr">something</span>: <span class="keyword">function</span>(<span class="params"></span>)&#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;Tell me something good...&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">let</span> bar = <span class="title class_">Object</span>.<span class="title function_">create</span>(foo);	<span class="comment">//Object.create(..)会创建一个新对象（bar）并把它关联到我们指定的对象（foo）</span></span><br><span class="line">bar.<span class="title function_">something</span>()		<span class="comment">//当something不存在bar，会把ta委托给foo</span></span><br></pre></td></tr></table></figure>

@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang='zh-CN'>
+
+<head>
+  <meta name="generator" content="Hexo 6.2.0">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.16.0">
+  <meta charset="utf-8">
+  
+
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  <link rel='dns-prefetch' href='https://fastly.jsdelivr.net'>
+  <link rel="preconnect" href="https://fastly.jsdelivr.net" crossorigin>
+  <link rel='dns-prefetch' href='//unpkg.com'>
+
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" content="#f8f8f8">
+  
+  <title>对一道循环计数题进行解剖 - Sunnylog</title>
+
+  
+    <meta name="description" content="题如下： 123456789&#x2F;&#x2F;想要效果：在for循环内，使用setTimeout延迟两秒后，依次打印i的值：0，1，2，3，4for(var i&#x3D;0;i&lt;5;i++)&amp;#123;        setTimeout(()&#x3D;&gt;&amp;#123;        console.log(i)    &amp;#125;,2000)&amp;#125;  上述代码最终的执行结果：延迟2秒后，在控制台中打印了五个5">
+<meta property="og:type" content="article">
+<meta property="og:title" content="对一道循环计数题进行解剖">
+<meta property="og:url" content="https://sunweipeng123.github.io/2022/11/25/%E5%AF%B9%E4%B8%80%E9%81%93%E5%BE%AA%E7%8E%AF%E8%AE%A1%E6%95%B0%E9%A2%98%E8%BF%9B%E8%A1%8C%E8%A7%A3%E5%89%96/index.html">
+<meta property="og:site_name" content="Sunnylog">
+<meta property="og:description" content="题如下： 123456789&#x2F;&#x2F;想要效果：在for循环内，使用setTimeout延迟两秒后，依次打印i的值：0，1，2，3，4for(var i&#x3D;0;i&lt;5;i++)&amp;#123;        setTimeout(()&#x3D;&gt;&amp;#123;        console.log(i)    &amp;#125;,2000)&amp;#125;  上述代码最终的执行结果：延迟2秒后，在控制台中打印了五个5">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-11-25T13:09:45.000Z">
+<meta property="article:modified_time" content="2022-11-25T13:10:58.573Z">
+<meta property="article:author" content="sunweipeng">
+<meta property="article:tag" content="javascript">
+<meta name="twitter:card" content="summary">
+  
+  
+
+  <!-- feed -->
+  
+
+  
+    
+<link rel="stylesheet" href="/css/main.css">
+
+  
+
+  
+    <link rel="shortcut icon" href="/images/caomao.png">
+  
+
+  
+
+  
+
+
+  
+<style>.darkmode--activated{--body-bg-color:#282828;--content-bg-color:#333;--card-bg-color:#555;--text-color:#ccc;--blockquote-color:#bbb;--link-color:#ccc;--link-hover-color:#eee;--brand-color:#ddd;--brand-hover-color:#ddd;--table-row-odd-bg-color:#282828;--table-row-hover-bg-color:#363636;--menu-item-bg-color:#555;--btn-default-bg:#222;--btn-default-color:#ccc;--btn-default-border-color:#555;--btn-default-hover-bg:#666;--btn-default-hover-color:#ccc;--btn-default-hover-border-color:#666;--highlight-background:#282b2e;--highlight-foreground:#a9b7c6;--highlight-gutter-background:#34393d;--highlight-gutter-foreground:#9ca9b6}.darkmode--activated img{opacity:.75}.darkmode--activated img:hover{opacity:.9}.darkmode--activated code{color:#69dbdc;background:0 0}button.darkmode-toggle{z-index:9999}.darkmode-ignore,img{display:flex!important}.beian img{display:inline-block!important}</style></head>
+
+<body>
+  
+
+
+
+
+  <div class='l_body' id='start'>
+    <aside class='l_left' layout='post'>
+    
+
+  
+
+<header class="header"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://fastly.jsdelivr.net/gh/cdn-x/placeholder@1.0.2/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="/images/caomao.png" onerror="javascript:this.classList.add('error');this.src='https://fastly.jsdelivr.net/gh/cdn-x/placeholder@1.0.1/image/2659360.svg';"></a><a class="title" href="/"><div class="main" ff="title">Sunnylog</div><div class="sub cap">视野所及，唯有前端</div></a></div>
+
+<nav class="menu dis-select"></nav>
+</header>
+
+
+<div class="widgets">
+
+<div class="widget-wrap single" id="toc"><div class="widget-header cap dis-select"><span class="name">对一道循环计数题进行解剖</span></div><div class="widget-body fs14"><div class="doc-tree active"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%99%E6%98%AF%E4%B8%BA%E4%BB%80%E4%B9%88%E5%91%A2%EF%BC%9F%E8%BF%9B%E8%A1%8C%E5%88%86%E6%9E%90%EF%BC%9A"><span class="toc-text">这是为什么呢？进行分析：</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E9%82%A3%E5%8F%88%E6%80%8E%E6%A0%B7%E6%89%8D%E7%AE%97%E5%BC%82%E6%AD%A5%E4%BB%BB%E5%8A%A1%EF%BC%8C%E5%A6%82%E4%BD%95%E5%8C%BA%E5%88%86%E5%91%A2%EF%BC%9F"><span class="toc-text">那又怎样才算异步任务，如何区分呢？</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%82%A3%E9%A2%98%E4%B8%AD%E7%9A%84%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F%E5%B0%B1%E5%8F%AF%E4%BB%A5%E8%BF%99%E6%A0%B7%E8%A7%A3%E9%87%8A%EF%BC%9A"><span class="toc-text">那题中的代码执行顺序就可以这样解释：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%A3%E5%86%B3"><span class="toc-text">解决</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%B8%80%EF%BC%9A%E4%BD%BF%E7%94%A8%E9%97%AD%E5%8C%85"><span class="toc-text">一：使用闭包</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BA%8C%EF%BC%9A%E5%88%A9%E7%94%A8%E5%9D%97%E7%BA%A7%E4%BD%9C%E7%94%A8%E5%9F%9F%EF%BC%88let%EF%BC%89"><span class="toc-text">二：利用块级作用域（let）</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93%EF%BC%9A%E4%B8%80%E9%81%93%E5%BE%AA%E7%8E%AF%E8%AE%A1%E7%AE%97%E9%A2%98%E6%B6%89%E5%8F%8A%E4%BA%86%E4%BB%A5%E4%B8%8B%E7%9F%A5%E8%AF%86%EF%BC%9A"><span class="toc-text">总结：一道循环计算题涉及了以下知识：</span></a></li></ol></div></div></div>
+
+
+
+
+</div>
+
+
+    </aside>
+    <div class='l_main'>
+      
+
+      
+
+
+<div class="bread-nav fs12"><div id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a><span class="sep"></span><a class="cap breadcrumb" href="/">文章</a><span class="sep"></span><a class="cap breadcrumb-link" href="/categories/%E5%89%8D%E7%AB%AF/">前端</a></div><div id="post-meta">发布于&nbsp;<time datetime="2022-11-25T13:09:45.000Z">2022-11-25</time></div></div>
+
+<article class='content md post'>
+<h1 class="article-title"><span>对一道循环计数题进行解剖</span></h1>
+<p>题如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//想要效果：在for循环内，使用setTimeout延迟两秒后，依次打印i的值：0，1，2，3，4</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>;i&lt;<span class="number">5</span>;i++)&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function">()=&gt;</span>&#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(i)</span><br><span class="line">    &#125;,<span class="number">2000</span>)</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上述代码最终的执行结果：延迟2秒后，在控制台中打印了五个5，这并不是我们预期想要的结果</p>
+<h3 id="这是为什么呢？进行分析："><a href="#这是为什么呢？进行分析：" class="headerlink" title="这是为什么呢？进行分析："></a>这是为什么呢？进行分析：</h3><ol>
+<li><p>这里的var声明不具备块级作用域，变量i被声明为全局变量</p>
+</li>
+<li><p>这段代码包含了同步代码和异步代码，为什么会产生异步，异步又如何执行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">首先JS是在单线程的环境下工作的，为了避免某一段JavaScript代码长时间运行，阻塞后面代码执行，导致其他任务无法执行（例如：浏览器无响应、假死），JavaScript将任务的执行模式分成两种：同步和异步</span><br><span class="line"></span><br><span class="line">- 同步模式：在主线程（执行栈）排队等待的任务，只能等待前一个完成才会执行完毕后才会执行下一个任务</span><br><span class="line"></span><br><span class="line">- 异步模式：不进入主线程而进入”消息队列“的任务（异步任务），会在&quot;消息队列&quot;中排队等待，当主线程中的任务运行完了，才会从”消息队列“取出异步任务放到主线程执行，执行完主线程，又再从”消息队列“取出任务执行，如此反复（这就是常说的eventloop）</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h5 id="那又怎样才算异步任务，如何区分呢？"><a href="#那又怎样才算异步任务，如何区分呢？" class="headerlink" title="那又怎样才算异步任务，如何区分呢？"></a>那又怎样才算异步任务，如何区分呢？</h5><p>常见的异步任务有：Ajax请求、setTimeout、Promise.then等 （异步任务又细分为宏任务和微任务，这里就不细说了）</p>
+</li>
+</ol>
+<h3 id="那题中的代码执行顺序就可以这样解释："><a href="#那题中的代码执行顺序就可以这样解释：" class="headerlink" title="那题中的代码执行顺序就可以这样解释："></a>那题中的代码执行顺序就可以这样解释：</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">开始进入for循环</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">在执行for内部时，setTimeout会被认为是异步任务，不会立即执行，而是推到消息队列排队等待，等待主线程的代码（同步代码）执行完后，再从消息队列出列，放到主线程去执行</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">主线程的代码：执行for循环这一块，当变量i不满足条件跳出循环时，也就是同步代码执行完毕的时候，此时的变量i的值为5</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">主线程代码执行完后开始执行异步的代码：setTimeout内的箭头函数</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">在执行箭头函数时，由于它内部并没有声明i变量，就会沿作用域链找，最终在全局作用域下，找到了变量i（i的值已经变为5了），每一次打印变量i时，都是在打印全局作用域下的i，也就是说它们共享同一个i，所以就打印了五个5</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h3><h5 id="一：使用闭包"><a href="#一：使用闭包" class="headerlink" title="一：使用闭包"></a>一：使用闭包</h5><p>闭包：由函数及声明该函数的词法环境组成，该环境包含了闭包函数创建时作用域内所有的局部变量，闭包维持了对它的词法环境的引用，简而言之，闭包能让我们从内部函数访问到外部函数的作用域</p>
+<p>举个例子：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">makeFunc</span>(<span class="params"></span>)&#123;</span><br><span class="line">    <span class="keyword">var</span> name = <span class="string">&quot;zhangs&quot;</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">displayName</span>(<span class="params"></span>)&#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(name)</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> displayName;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> myFunc = <span class="title function_">makeFunc</span>()</span><br><span class="line"><span class="title function_">myFunc</span>()</span><br><span class="line"><span class="comment">//执行结果：控制台打印了“zhangs”</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">makeFunc函数内有一个局部变量name和声明了一个displayName函数，并且makeFunc函数执行时，会返回displayName函数</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">myFunc就是在makeFunc执行后，接收了它的返回值，一个对displayName函数实例的引用</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">myFunc方法执行就是在执行displayName方法，那为什么console.log(name)，会输出zhangs呢？</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">进行分析：</span></span><br><span class="line"><span class="comment">按道理来说，makeFunc函数执行完后，它的局部变量name会被销毁才对，然而代码却按照预期执行。</span></span><br><span class="line"><span class="comment">原因就在于JavaScript中的函数会形成闭包，displayName就是一个闭包函数，displayName维持了对它的词法环境（变量name就存在其中）的引用，就算makeFunc执行完毕，它的局部变量name也不会被销毁，因为name被displayName引用了。</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>回到开头的循环计数题，我们就可以用闭包实现我们想要的效果</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>;i&lt;<span class="number">5</span>;i++)&#123;</span><br><span class="line">    </span><br><span class="line">    (<span class="keyword">function</span>(<span class="params">j</span>)&#123;</span><br><span class="line"></span><br><span class="line">        <span class="built_in">setTimeout</span>(<span class="function">()=&gt;</span>&#123;</span><br><span class="line">            <span class="variable language_">console</span>.<span class="title function_">log</span>(j)</span><br><span class="line">        &#125;,<span class="number">2000</span>)</span><br><span class="line"></span><br><span class="line">    &#125;)(i)</span><br><span class="line">        </span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="二：利用块级作用域（let）"><a href="#二：利用块级作用域（let）" class="headerlink" title="二：利用块级作用域（let）"></a>二：利用块级作用域（let）</h5><p>ES6新增的let具有块级作用域，也可以用它进行循环计数</p>
+<p>值得注意的是：const也具有块级作用域，但它不能用来计数（原因：const i &#x3D; 0，i的值不允许再改变，i相当于常量）</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="keyword">let</span> i=<span class="number">0</span>;i&lt;<span class="number">5</span>;i++)&#123;	<span class="comment">//此时用let声明的i不会成为全局变量，在外部无法访问到i</span></span><br><span class="line">    </span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function">()=&gt;</span>&#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(i)</span><br><span class="line">    &#125;,<span class="number">2000</span>)</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="总结：一道循环计算题涉及了以下知识："><a href="#总结：一道循环计算题涉及了以下知识：" class="headerlink" title="总结：一道循环计算题涉及了以下知识："></a>总结：一道循环计算题涉及了以下知识：</h3><ol>
+<li>var、let和const的区别</li>
+<li>同步模式、异步模式及异步代码如何执行</li>
+<li>闭包</li>
+</ol>
+
+
+<div class="article-footer reveal fs14"><section id="license"><div class="header"><span>许可协议</span></div><div class="body"><p>本文采用<a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a>许可协议，转载请注明出处。</p>
+</div></section></div>
+
+</article>
+
+<div class="related-wrap reveal" id="read-next"><section class="body"><div class="item" id="prev"></div><div class="item" id="next"><div class="note">较早文章</div><a href="/2022/11/24/ts-webpack%E7%8E%AF%E5%A2%83%E6%9E%84%E5%BB%BA/">ts+webpack环境构建</a></div></section></div>
+
+
+
+
+
+
+
+
+      
+<footer class="page-footer reveal fs12"><hr><div class="text"><p>本站由 <a href="/">@anonymity</a> 使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar">Stellar</a> 主题创建。<br>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
+</div></footer>
+
+      <div class='float-panel mobile-only blur' style='display:none'>
+  <button type='button' class='sidebar-toggle mobile' onclick='sidebar.toggle()'>
+    <svg class="icon" style="width: 1em; height: 1em;vertical-align: middle;fill: currentColor;overflow: hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="15301"><path d="M566.407 808.3c26.9-0.1 49.3-20.8 51.6-47.6-1.9-27.7-23.9-49.7-51.6-51.6h-412.6c-28.2-1.4-52.6 19.5-55.5 47.6 2.3 26.8 24.6 47.5 51.6 47.6h416.5v4z m309.3-249.9c26.9-0.1 49.3-20.8 51.6-47.6-2.2-26.8-24.6-47.5-51.6-47.6h-721.9c-27.7-2.8-52.5 17.4-55.3 45.1-0.1 0.8-0.1 1.7-0.2 2.5 0.9 27.2 23.6 48.5 50.7 47.6H875.707z m-103.1-245.9c26.9-0.1 49.3-20.8 51.6-47.6-0.4-28.3-23.2-51.1-51.5-51.6h-618.9c-29.5-1.1-54.3 21.9-55.5 51.4v0.2c1.4 27.8 25.2 49.2 53 47.8 0.8 0 1.7-0.1 2.5-0.2h618.8z" p-id="15302"></path><path d="M566.407 808.3c26.9-0.1 49.3-20.8 51.6-47.6-1.9-27.7-23.9-49.7-51.6-51.6h-412.6c-28.2-1.4-52.6 19.5-55.5 47.6 1.9 27.7 23.9 49.7 51.6 51.6h416.5z m309.3-249.9c26.9-0.1 49.3-20.8 51.6-47.6-2.2-26.8-24.6-47.5-51.6-47.6h-721.9c-27.7-2.8-52.5 17.4-55.3 45.1-0.1 0.8-0.1 1.7-0.2 2.5 0.9 27.2 23.6 48.5 50.7 47.6H875.707z m-103.1-245.9c26.9-0.1 49.3-20.8 51.6-47.6-0.4-28.3-23.2-51.1-51.5-51.6h-618.9c-29.5-1.1-54.3 21.9-55.5 51.4v0.2c1.4 27.8 25.2 49.2 53 47.8 0.8 0 1.7-0.1 2.5-0.2h618.8z" p-id="15303"></path></svg>
+  </button>
+</div>
+
+    </div>
+  </div>
+  <div class='scripts'>
+    <script type="text/javascript">
+  stellar = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    loadCSS: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    // 从 butterfly 和 volantis 获得灵感
+    loadScript: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    // https://github.com/jerryc127/hexo-theme-butterfly
+    jQuery: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        stellar.loadScript(stellar.plugins.jQuery).then(fn)
+      } else {
+        fn()
+      }
+    }
+  };
+  stellar.version = '1.16.0';
+  stellar.github = 'https://github.com/xaoxuu/hexo-theme-stellar/tree/1.16.0';
+  stellar.config = {
+    date_suffix: {
+      just: '刚刚',
+      min: '分钟前',
+      hour: '小时前',
+      day: '天前',
+      month: '个月前',
+    },
+  };
+
+  // required plugins (only load if needs)
+  stellar.plugins = {
+    jQuery: 'https://fastly.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js'
+  };
+
+  // stellar js
+  stellar.plugins.stellar = Object.assign({"sites":"/js/plugins/sites.js","friends":"/js/plugins/friends.js","ghinfo":"/js/plugins/ghinfo.js","timeline":"/js/plugins/timeline.js","linkcard":"/js/plugins/linkcard.js","fcircle":"/js/plugins/fcircle.js"});
+
+  stellar.plugins.marked = Object.assign("https://cdn.bootcdn.net/ajax/libs/marked/4.0.18/marked.min.js");
+  // optional plugins
+  if ('true' == 'true') {
+    stellar.plugins.lazyload = Object.assign({"enable":true,"js":"https://fastly.jsdelivr.net/npm/vanilla-lazyload@17.3.1/dist/lazyload.min.js","transition":"blur"});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.swiper = Object.assign({"enable":true,"css":"https://unpkg.com/swiper@6/swiper-bundle.min.css","js":"https://unpkg.com/swiper@6/swiper-bundle.min.js"});
+  }
+  if ('' == 'true') {
+    stellar.plugins.scrollreveal = Object.assign({"enable":null,"js":"https://fastly.jsdelivr.net/npm/scrollreveal@4.0.9/dist/scrollreveal.min.js","distance":"8px","duration":500,"interval":100,"scale":1});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.preload = Object.assign({"enable":true,"service":"flying_pages","instant_page":"https://fastly.jsdelivr.net/gh/volantis-x/cdn-volantis@4.1.2/js/instant_page.js","flying_pages":"https://fastly.jsdelivr.net/gh/gijo-varghese/flying-pages@2.1.2/flying-pages.min.js"});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.fancybox = Object.assign({"enable":true,"js":"https://fastly.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.umd.js","css":"https://fastly.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.css","selector":".swiper-slide img"});
+  }
+  if ('false' == 'true') {
+    stellar.plugins.heti = Object.assign({"enable":false,"css":"https://unpkg.com/heti/umd/heti.min.css","js":"https://unpkg.com/heti/umd/heti-addon.min.js"});
+  }
+</script>
+
+<!-- required -->
+
+  
+<script src="/js/main.js" async></script>
+
+
+
+<!-- optional -->
+
+
+
+<!-- inject -->
+
+
+  </div>
+</body>
+</html>
