@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang='zh-CN'>
+
+<head>
+  <meta name="generator" content="Hexo 6.2.0">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.16.0">
+  <meta charset="utf-8">
+  
+
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  <link rel='dns-prefetch' href='https://fastly.jsdelivr.net'>
+  <link rel="preconnect" href="https://fastly.jsdelivr.net" crossorigin>
+  <link rel='dns-prefetch' href='//unpkg.com'>
+
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" content="#f8f8f8">
+  
+  <title>设计模式之发布订阅模式 - Sunnylog</title>
+
+  
+    <meta name="description" content="发布-订阅或观察者模式：定义对象间的一种一对多的依赖关系，当一个对象的状态发生改变时，所有依赖于它的对象都将得到通知。 介绍：在软件架构中，发布-订阅模式是一种消息范式，消息的发送者（称为发布者）不会将消息直接发送给特定的接收者（称为订阅者）。而是将发布的消息分为不同的类别，无需了解哪些订阅者（如果有的话）可能存在。同样的，订阅者可以表达对一个或多个类别的兴趣，只接收感兴趣的消息，无需了解哪些发布">
+<meta property="og:type" content="article">
+<meta property="og:title" content="设计模式之发布订阅模式">
+<meta property="og:url" content="https://sunweipeng123.github.io/2023/01/13/%E5%8F%91%E5%B8%83%E8%AE%A2%E9%98%85%E6%A8%A1%E5%BC%8F/index.html">
+<meta property="og:site_name" content="Sunnylog">
+<meta property="og:description" content="发布-订阅或观察者模式：定义对象间的一种一对多的依赖关系，当一个对象的状态发生改变时，所有依赖于它的对象都将得到通知。 介绍：在软件架构中，发布-订阅模式是一种消息范式，消息的发送者（称为发布者）不会将消息直接发送给特定的接收者（称为订阅者）。而是将发布的消息分为不同的类别，无需了解哪些订阅者（如果有的话）可能存在。同样的，订阅者可以表达对一个或多个类别的兴趣，只接收感兴趣的消息，无需了解哪些发布">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-01-13T13:10:41.000Z">
+<meta property="article:modified_time" content="2023-01-13T13:15:42.265Z">
+<meta property="article:author" content="sunweipeng">
+<meta property="article:tag" content="TypeScript">
+<meta name="twitter:card" content="summary">
+  
+  
+
+  <!-- feed -->
+  
+
+  
+    
+<link rel="stylesheet" href="/css/main.css">
+
+  
+
+  
+    <link rel="shortcut icon" href="/images/caomao.png">
+  
+
+  
+
+  
+
+
+  
+<style>.darkmode--activated{--body-bg-color:#282828;--content-bg-color:#333;--card-bg-color:#555;--text-color:#ccc;--blockquote-color:#bbb;--link-color:#ccc;--link-hover-color:#eee;--brand-color:#ddd;--brand-hover-color:#ddd;--table-row-odd-bg-color:#282828;--table-row-hover-bg-color:#363636;--menu-item-bg-color:#555;--btn-default-bg:#222;--btn-default-color:#ccc;--btn-default-border-color:#555;--btn-default-hover-bg:#666;--btn-default-hover-color:#ccc;--btn-default-hover-border-color:#666;--highlight-background:#282b2e;--highlight-foreground:#a9b7c6;--highlight-gutter-background:#34393d;--highlight-gutter-foreground:#9ca9b6}.darkmode--activated img{opacity:.75}.darkmode--activated img:hover{opacity:.9}.darkmode--activated code{color:#69dbdc;background:0 0}button.darkmode-toggle{z-index:9999}.darkmode-ignore,img{display:flex!important}.beian img{display:inline-block!important}</style></head>
+
+<body>
+  
+
+
+
+
+  <div class='l_body' id='start'>
+    <aside class='l_left' layout='post'>
+    
+
+  
+
+<header class="header"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://fastly.jsdelivr.net/gh/cdn-x/placeholder@1.0.2/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="/images/caomao.png" onerror="javascript:this.classList.add('error');this.src='https://fastly.jsdelivr.net/gh/cdn-x/placeholder@1.0.1/image/2659360.svg';"></a><a class="title" href="/"><div class="main" ff="title">Sunnylog</div><div class="sub cap">视野所及，唯有前端</div></a></div>
+
+<nav class="menu dis-select"></nav>
+</header>
+
+
+<div class="widgets">
+
+<div class="widget-wrap single" id="toc"><div class="widget-header cap dis-select"><span class="name">设计模式之发布订阅模式</span></div><div class="widget-body fs14"><div class="doc-tree active"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-text">应用场景</span></a></li></ol></div></div></div>
+
+
+
+
+</div>
+
+
+    </aside>
+    <div class='l_main'>
+      
+
+      
+
+
+<div class="bread-nav fs12"><div id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a><span class="sep"></span><a class="cap breadcrumb" href="/">文章</a><span class="sep"></span><a class="cap breadcrumb-link" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a></div><div id="post-meta">发布于&nbsp;<time datetime="2023-01-13T13:10:41.000Z">2023-01-13</time></div></div>
+
+<article class='content md post'>
+<h1 class="article-title"><span>设计模式之发布订阅模式</span></h1>
+<p>发布-订阅或观察者模式：定义对象间的一种一对多的依赖关系，当一个对象的状态发生改变时，所有依赖于它的对象都将得到通知。</p>
+<p><strong>介绍</strong>：<strong style="color:orange;">在<a href="https://link.juejin.cn/?target=https://zh.wikipedia.org/wiki/%E8%BD%AF%E4%BB%B6%E6%9E%B6%E6%9E%84">软件架构</a>中，发布-订阅模式是一种<a href="https://link.juejin.cn/?target=https://zh.wikipedia.org/wiki/%E6%B6%88%E6%81%AF">消息</a><a href="https://link.juejin.cn/?target=https://zh.wikipedia.org/wiki/%E8%8C%83%E5%BC%8F">范式</a>，消息的发送者（称为发布者）<strong>不会将消息直接发送给特定的接收者</strong>（称为订阅者）。而是将发布的消息分为不同的类别，无需了解哪些订阅者（如果有的话）可能存在。同样的，订阅者可以表达对一个或多个类别的兴趣，只接收感兴趣的消息，无需了解哪些发布者（如果有的话）存在。</strong></p>
+<h3 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h3><p>假设小明要买房，小明未必要亲自去售楼处了解具体情况，只需要把订阅的请求交给中介公司，而各大房产公司也只需要通过中介公司来发布房子信息，这样小明就可以收到发布者发布的信息。在整个过程中，小明（订阅者）与房产公司（发布者）通信是通过中介公司完成的，不用关心是谁订阅、也不需要知道谁发布。像这种情况就可以使用发布-订阅模式</p>
+<p>发布-订阅模式可以用一个全局的Event对象（如：中介公司）来实现，订阅者不需要了解消息来自哪个发布者，发布者也不知道消息会推送给哪些订阅者，Event作为一个类似“中介者”的角色，把订阅者和发布者联系起来</p>
+<p>具体代码如下：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> <span class="title class_">ISubscriber</span>&#123;</span><br><span class="line">    <span class="attr">name</span>:<span class="built_in">string</span>;</span><br><span class="line">    <span class="attr">eventName</span>:<span class="built_in">string</span>;</span><br><span class="line">    <span class="attr">callback</span>:<span class="function">(<span class="params">info:<span class="built_in">string</span></span>)=&gt;</span><span class="built_in">void</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">interface</span> <span class="title class_">IPublisher</span>&#123;</span><br><span class="line">    <span class="attr">name</span>:<span class="built_in">string</span>;</span><br><span class="line">    <span class="attr">data</span>:&#123;</span><br><span class="line">        <span class="attr">message</span>:<span class="built_in">string</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//订阅者类</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Subscriber</span> <span class="keyword">implements</span> <span class="title class_">ISubscriber</span>&#123;</span><br><span class="line">    <span class="attr">name</span>:<span class="built_in">string</span>;    <span class="comment">//订阅者名称</span></span><br><span class="line">    <span class="attr">eventName</span>:<span class="built_in">string</span>;   <span class="comment">//订阅者事件</span></span><br><span class="line">    <span class="attr">callback</span>:<span class="function">(<span class="params">info?:<span class="built_in">string</span></span>)=&gt;</span><span class="built_in">void</span>; <span class="comment">//发布后的操作</span></span><br><span class="line">    <span class="title function_">constructor</span>(<span class="params">name:<span class="built_in">string</span>,eventName:<span class="built_in">string</span>,callback:(info?:<span class="built_in">string</span>)=&gt;<span class="built_in">void</span></span>)&#123;</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">name</span> = name;</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">eventName</span> = eventName;</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">callback</span> = callback</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//发布者类</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Publisher</span> <span class="keyword">implements</span> <span class="title class_">IPublisher</span>&#123;</span><br><span class="line">    <span class="attr">name</span>:<span class="built_in">string</span>;    <span class="comment">//发布的事件名</span></span><br><span class="line">    <span class="attr">data</span>:&#123;<span class="attr">message</span>:<span class="built_in">string</span>&#125;;  <span class="comment">//发布的数据</span></span><br><span class="line">    <span class="title function_">constructor</span>(<span class="params">name:<span class="built_in">string</span>,data:&#123;message:<span class="built_in">string</span>&#125;</span>)&#123;</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">name</span> = name;</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">data</span> = data</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//事件总线</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">EventBus</span>&#123;</span><br><span class="line">    <span class="attr">subscribeList</span>:<span class="built_in">any</span> = &#123;&#125;      <span class="comment">//缓存对象：每个事件都是一个数组，数组里面保存订阅对象信息</span></span><br><span class="line">    <span class="comment">//添加</span></span><br><span class="line">    <span class="title function_">on</span>(<span class="params">subObj:ISubscriber</span>)&#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`开始订阅<span class="subst">$&#123;subObj.eventName&#125;</span>事件`</span>,subObj.<span class="property">name</span>)</span><br><span class="line">        <span class="keyword">if</span>(!<span class="variable language_">this</span>.<span class="property">subscribeList</span>[subObj.<span class="property">eventName</span>])&#123;     <span class="comment">//如果不存在就新增一个数组进行缓存</span></span><br><span class="line">            <span class="variable language_">this</span>.<span class="property">subscribeList</span>[subObj.<span class="property">eventName</span>] = []</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">subscribeList</span>[subObj.<span class="property">eventName</span>].<span class="title function_">push</span>(&#123;<span class="attr">name</span>:subObj.<span class="property">name</span>,<span class="attr">callback</span>:subObj.<span class="property">callback</span>&#125;)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//触发</span></span><br><span class="line">    <span class="title function_">emit</span>(<span class="params">pubObj:IPublisher</span>)&#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;正在触发&#x27;</span>,pubObj.<span class="property">name</span>);   <span class="comment">//发布消息后触发对应的订阅者</span></span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">subscribeList</span>[pubObj.<span class="property">name</span>].<span class="title function_">forEach</span>(<span class="function">(<span class="params">item:<span class="built_in">any</span></span>)=&gt;</span>&#123;</span><br><span class="line">            item.<span class="title function_">callback</span>(pubObj.<span class="property">data</span>.<span class="property">message</span>)</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//取消</span></span><br><span class="line">    <span class="title function_">off</span>(<span class="params">eventName:<span class="built_in">string</span>,obj:ISubscriber</span>)&#123;       <span class="comment">//取消订阅者订阅</span></span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`*****正在取消<span class="subst">$&#123;eventName&#125;</span>*****`</span>);</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">subscribeList</span>[eventName] = <span class="variable language_">this</span>.<span class="property">subscribeList</span>[eventName].<span class="title function_">filter</span>(<span class="function">(<span class="params">item:<span class="built_in">any</span></span>)=&gt;</span>&#123;</span><br><span class="line">            <span class="keyword">return</span> item.<span class="property">name</span>!=obj.<span class="property">name</span></span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> xiaoming = <span class="keyword">new</span> <span class="title class_">Subscriber</span>(<span class="string">&#x27;xiaoming&#x27;</span>,<span class="string">&#x27;squareMeter100&#x27;</span>,<span class="function">(<span class="params">info</span>)=&gt;</span>&#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;xiaoming订阅了squareMeter100事件&#x27;</span>,info!)</span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">const</span> haha = <span class="keyword">new</span> <span class="title class_">Subscriber</span>(<span class="string">&#x27;qingzi&#x27;</span>,<span class="string">&#x27;squareMeter100&#x27;</span>,<span class="function">(<span class="params">info</span>)=&gt;</span>&#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;qingzi订阅了squareMeter100事件&#x27;</span>,info)</span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">const</span> xbb = <span class="keyword">new</span> <span class="title class_">Subscriber</span>(<span class="string">&#x27;xbb&#x27;</span>,<span class="string">&#x27;squareMeter300&#x27;</span>,<span class="function">(<span class="params">info</span>)=&gt;</span>&#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;xbb订阅了squareMeter300该事件&#x27;</span>,info)</span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">const</span> eventbus = <span class="keyword">new</span> <span class="title class_">EventBus</span>()</span><br><span class="line"><span class="keyword">const</span> p1 = <span class="keyword">new</span> <span class="title class_">Publisher</span>(<span class="string">&#x27;squareMeter100&#x27;</span>,&#123;<span class="attr">message</span>:<span class="string">&#x27;100平米的房子&#x27;</span>&#125;)</span><br><span class="line"><span class="keyword">const</span> p2 = <span class="keyword">new</span> <span class="title class_">Publisher</span>(<span class="string">&#x27;squareMeter300&#x27;</span>,&#123;<span class="attr">message</span>:<span class="string">&#x27;300平米的大房子&#x27;</span>&#125;)</span><br><span class="line">eventbus.<span class="title function_">on</span>(xiaoming);</span><br><span class="line">eventbus.<span class="title function_">on</span>(haha);</span><br><span class="line">eventbus.<span class="title function_">on</span>(xbb);</span><br><span class="line"><span class="comment">//发布“squareMeter100”相关消息</span></span><br><span class="line">eventbus.<span class="title function_">emit</span>(p1);</span><br><span class="line"><span class="comment">//发布“squareMeter300”相关消息</span></span><br><span class="line">eventbus.<span class="title function_">emit</span>(p2);</span><br><span class="line"><span class="comment">//取消小明订阅的squareMeter100事件</span></span><br><span class="line">eventbus.<span class="title function_">off</span>(<span class="string">&#x27;squareMeter100&#x27;</span>,xiaoming);</span><br></pre></td></tr></table></figure>
+
+<p>上述代码中一个订阅者只能订阅一个消息，修改代码，让一个订阅者可订阅多个消息</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//一个订阅者可订阅多个消息</span></span><br><span class="line"><span class="keyword">type</span> subEventListT = &#123;<span class="attr">eventName</span>:<span class="built_in">string</span>,<span class="attr">callback</span>:<span class="function">(<span class="params">info:<span class="built_in">string</span></span>)=&gt;</span><span class="built_in">void</span>&#125;</span><br><span class="line"><span class="keyword">interface</span> <span class="title class_">ISubscriber</span>&#123;</span><br><span class="line">    <span class="attr">name</span>:<span class="built_in">string</span>;</span><br><span class="line">    <span class="attr">subEventList</span>:subEventListT[]</span><br><span class="line">    <span class="attr">addSubEvent</span>:<span class="function">(<span class="params">eventName:<span class="built_in">string</span>,callback:()=&gt;<span class="built_in">void</span></span>)=&gt;</span><span class="built_in">void</span>;</span><br><span class="line">    <span class="attr">offSubEvent</span>:<span class="function">(<span class="params">eventName:<span class="built_in">string</span></span>)=&gt;</span><span class="built_in">void</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">interface</span> <span class="title class_">IPublisher</span>&#123;</span><br><span class="line">    <span class="attr">name</span>:<span class="built_in">string</span>;</span><br><span class="line">    <span class="attr">data</span>:&#123;</span><br><span class="line">        <span class="attr">message</span>:<span class="built_in">string</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//订阅者类</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Subscriber</span> <span class="keyword">implements</span> <span class="title class_">ISubscriber</span>&#123;</span><br><span class="line">    <span class="attr">name</span>:<span class="built_in">string</span>;    <span class="comment">//订阅者名称</span></span><br><span class="line">    <span class="attr">subEventList</span>:subEventListT[]</span><br><span class="line">    <span class="title function_">constructor</span>(<span class="params">name:<span class="built_in">string</span></span>)&#123;</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">name</span> = name;</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">subEventList</span> = []</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//增加订阅事件,可订阅多个</span></span><br><span class="line">    <span class="title function_">addSubEvent</span>(<span class="params">eventName:<span class="built_in">string</span>,callback:(info:<span class="built_in">string</span>)=&gt;<span class="built_in">void</span></span>)&#123;</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">subEventList</span>.<span class="title function_">push</span>(&#123;<span class="attr">eventName</span>:eventName,<span class="attr">callback</span>:callback&#125;)</span><br><span class="line">        <span class="comment">// console.log(this.subEventList)</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//取消订阅事件</span></span><br><span class="line">    <span class="title function_">offSubEvent</span>(<span class="params">eventName:<span class="built_in">string</span></span>)&#123;</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">subEventList</span> = <span class="variable language_">this</span>.<span class="property">subEventList</span>.<span class="title function_">filter</span>(<span class="function">(<span class="params">item:subEventListT</span>)=&gt;</span>&#123;</span><br><span class="line">            <span class="keyword">return</span> item.<span class="property">eventName</span>!=eventName</span><br><span class="line">        &#125;)</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`已取消<span class="subst">$&#123;<span class="variable language_">this</span>.name&#125;</span>的<span class="subst">$&#123;eventName&#125;</span>事件`</span>,<span class="variable language_">this</span>.<span class="property">subEventList</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//发布者类</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Publisher</span> <span class="keyword">implements</span> <span class="title class_">IPublisher</span>&#123;</span><br><span class="line">    <span class="attr">name</span>:<span class="built_in">string</span>;    <span class="comment">//发布的事件名</span></span><br><span class="line">    <span class="attr">data</span>:&#123;<span class="attr">message</span>:<span class="built_in">string</span>&#125;;  <span class="comment">//发布的数据</span></span><br><span class="line">    <span class="title function_">constructor</span>(<span class="params">name:<span class="built_in">string</span>,data:&#123;message:<span class="built_in">string</span>&#125;</span>)&#123;</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">name</span> = name;</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">data</span> = data</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//事件总线</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">EventBus</span>&#123;</span><br><span class="line">    <span class="attr">subscribeList</span>:<span class="built_in">any</span> = &#123;&#125;      <span class="comment">//缓存对象：每个事件都是一个数组，数组里面保存订阅对象信息</span></span><br><span class="line">    <span class="comment">//添加</span></span><br><span class="line">    <span class="title function_">on</span>(<span class="params">subObj:ISubscriber</span>)&#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;开始订阅&#x27;</span>);</span><br><span class="line">        subObj.<span class="property">subEventList</span>.<span class="title function_">forEach</span>(<span class="function">(<span class="params">item:subEventListT</span>)=&gt;</span>&#123;</span><br><span class="line">            <span class="keyword">if</span>(!<span class="variable language_">this</span>.<span class="property">subscribeList</span>[item.<span class="property">eventName</span>])&#123;</span><br><span class="line">                <span class="variable language_">this</span>.<span class="property">subscribeList</span>[item.<span class="property">eventName</span>] = []</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//添加一个对象，增加name标识是谁订阅的</span></span><br><span class="line">            <span class="variable language_">this</span>.<span class="property">subscribeList</span>[item.<span class="property">eventName</span>].<span class="title function_">push</span>(&#123;<span class="attr">name</span>:subObj.<span class="property">name</span>,<span class="attr">callback</span>:item.<span class="property">callback</span>&#125;)</span><br><span class="line">        &#125;)</span><br><span class="line">        <span class="comment">// console.log(this.subscribeList)</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//触发</span></span><br><span class="line">    <span class="title function_">emit</span>(<span class="params">pubObj:IPublisher</span>)&#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;正在触发&#x27;</span>,pubObj.<span class="property">name</span>);   <span class="comment">//发布消息后触发对应的订阅者</span></span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">subscribeList</span>[pubObj.<span class="property">name</span>].<span class="title function_">forEach</span>(<span class="function">(<span class="params">item:<span class="built_in">any</span></span>)=&gt;</span>&#123;</span><br><span class="line">            item.<span class="title function_">callback</span>(pubObj.<span class="property">data</span>.<span class="property">message</span>)</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//取消</span></span><br><span class="line">    <span class="title function_">off</span>(<span class="params">eventName:<span class="built_in">string</span>,obj:ISubscriber</span>)&#123;       <span class="comment">//取消订阅者订阅</span></span><br><span class="line">        <span class="comment">//通知订阅者取消某事件的订阅</span></span><br><span class="line">        obj.<span class="title function_">offSubEvent</span>(eventName)</span><br><span class="line">        <span class="comment">//取消缓存数组的订阅者信息</span></span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">subscribeList</span>[eventName] = <span class="variable language_">this</span>.<span class="property">subscribeList</span>[eventName].<span class="title function_">filter</span>(<span class="function">(<span class="params">item:<span class="built_in">any</span></span>)=&gt;</span>&#123;</span><br><span class="line">            <span class="keyword">return</span> item.<span class="property">name</span>!=obj.<span class="property">name</span></span><br><span class="line">        &#125;)</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="variable language_">this</span>.<span class="property">subscribeList</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> xiaoming = <span class="keyword">new</span> <span class="title class_">Subscriber</span>(<span class="string">&#x27;xiaoming&#x27;</span>)</span><br><span class="line">xiaoming.<span class="title function_">addSubEvent</span>(<span class="string">&#x27;squareMeter100&#x27;</span>,<span class="function">(<span class="params">info</span>)=&gt;</span>&#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;xiaoming添加了squareMeter100订阅&#x27;</span>,info)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">xiaoming.<span class="title function_">addSubEvent</span>(<span class="string">&#x27;squareMeter200&#x27;</span>,<span class="function">(<span class="params">info</span>)=&gt;</span>&#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;xiaoming添加了squareMeter200订阅&#x27;</span>,info)</span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">const</span> hehe = <span class="keyword">new</span> <span class="title class_">Subscriber</span>(<span class="string">&#x27;hehe&#x27;</span>);</span><br><span class="line">hehe.<span class="title function_">addSubEvent</span>(<span class="string">&#x27;squareMeter100&#x27;</span>,<span class="function">(<span class="params">info</span>)=&gt;</span>&#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;hehe也订阅squareMeter100&#x27;</span>,info)</span><br><span class="line">&#125;)</span><br><span class="line">xiaoming.<span class="title function_">addSubEvent</span>(<span class="string">&#x27;squareMeter300&#x27;</span>,<span class="function">(<span class="params">info</span>)=&gt;</span>&#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;xiaoming添加了squareMeter300订阅&#x27;</span>,info)</span><br><span class="line">&#125;)</span><br><span class="line">hehe.<span class="title function_">addSubEvent</span>(<span class="string">&#x27;squareMeter300&#x27;</span>,<span class="function">(<span class="params">info</span>)=&gt;</span>&#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;hehe也订阅squareMeter300&#x27;</span>,info)</span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">const</span> eventbus = <span class="keyword">new</span> <span class="title class_">EventBus</span>()</span><br><span class="line">eventbus.<span class="title function_">on</span>(xiaoming)</span><br><span class="line">eventbus.<span class="title function_">on</span>(hehe)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> p = <span class="keyword">new</span> <span class="title class_">Publisher</span>(<span class="string">&#x27;squareMeter100&#x27;</span>,&#123;<span class="attr">message</span>:<span class="string">&#x27;100平米的房子&#x27;</span>&#125;)</span><br><span class="line">eventbus.<span class="title function_">emit</span>(p)</span><br><span class="line"></span><br><span class="line">eventbus.<span class="title function_">off</span>(<span class="string">&#x27;squareMeter100&#x27;</span>,xiaoming)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> p2 = <span class="keyword">new</span> <span class="title class_">Publisher</span>(<span class="string">&#x27;squareMeter300&#x27;</span>,&#123;<span class="attr">message</span>:<span class="string">&#x27;300平米的大房子&#x27;</span>&#125;);</span><br><span class="line">eventbus.<span class="title function_">emit</span>(p2)</span><br></pre></td></tr></table></figure>
+
+<div class="article-footer reveal fs14"><section id="license"><div class="header"><span>许可协议</span></div><div class="body"><p>本文采用<a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a>许可协议，转载请注明出处。</p>
+</div></section></div>
+
+</article>
+
+<div class="related-wrap reveal" id="read-next"><section class="body"><div class="item" id="prev"><div class="note">较新文章</div><a href="/2023/01/13/%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/">设计模式之模板方法模式</a></div><div class="item" id="next"><div class="note">较早文章</div><a href="/2022/12/31/JSX%E5%AE%9E%E7%8E%B0todoList%E6%A1%88%E4%BE%8B/">JSX实现todoList案例</a></div></section></div>
+
+
+
+
+
+
+
+
+      
+<footer class="page-footer reveal fs12"><hr><div class="text"><p>本站由 <a href="/">@anonymity</a> 使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar">Stellar</a> 主题创建。<br>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
+</div></footer>
+
+      <div class='float-panel mobile-only blur' style='display:none'>
+  <button type='button' class='sidebar-toggle mobile' onclick='sidebar.toggle()'>
+    <svg class="icon" style="width: 1em; height: 1em;vertical-align: middle;fill: currentColor;overflow: hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="15301"><path d="M566.407 808.3c26.9-0.1 49.3-20.8 51.6-47.6-1.9-27.7-23.9-49.7-51.6-51.6h-412.6c-28.2-1.4-52.6 19.5-55.5 47.6 2.3 26.8 24.6 47.5 51.6 47.6h416.5v4z m309.3-249.9c26.9-0.1 49.3-20.8 51.6-47.6-2.2-26.8-24.6-47.5-51.6-47.6h-721.9c-27.7-2.8-52.5 17.4-55.3 45.1-0.1 0.8-0.1 1.7-0.2 2.5 0.9 27.2 23.6 48.5 50.7 47.6H875.707z m-103.1-245.9c26.9-0.1 49.3-20.8 51.6-47.6-0.4-28.3-23.2-51.1-51.5-51.6h-618.9c-29.5-1.1-54.3 21.9-55.5 51.4v0.2c1.4 27.8 25.2 49.2 53 47.8 0.8 0 1.7-0.1 2.5-0.2h618.8z" p-id="15302"></path><path d="M566.407 808.3c26.9-0.1 49.3-20.8 51.6-47.6-1.9-27.7-23.9-49.7-51.6-51.6h-412.6c-28.2-1.4-52.6 19.5-55.5 47.6 1.9 27.7 23.9 49.7 51.6 51.6h416.5z m309.3-249.9c26.9-0.1 49.3-20.8 51.6-47.6-2.2-26.8-24.6-47.5-51.6-47.6h-721.9c-27.7-2.8-52.5 17.4-55.3 45.1-0.1 0.8-0.1 1.7-0.2 2.5 0.9 27.2 23.6 48.5 50.7 47.6H875.707z m-103.1-245.9c26.9-0.1 49.3-20.8 51.6-47.6-0.4-28.3-23.2-51.1-51.5-51.6h-618.9c-29.5-1.1-54.3 21.9-55.5 51.4v0.2c1.4 27.8 25.2 49.2 53 47.8 0.8 0 1.7-0.1 2.5-0.2h618.8z" p-id="15303"></path></svg>
+  </button>
+</div>
+
+    </div>
+  </div>
+  <div class='scripts'>
+    <script type="text/javascript">
+  stellar = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    loadCSS: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    // 从 butterfly 和 volantis 获得灵感
+    loadScript: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    // https://github.com/jerryc127/hexo-theme-butterfly
+    jQuery: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        stellar.loadScript(stellar.plugins.jQuery).then(fn)
+      } else {
+        fn()
+      }
+    }
+  };
+  stellar.version = '1.16.0';
+  stellar.github = 'https://github.com/xaoxuu/hexo-theme-stellar/tree/1.16.0';
+  stellar.config = {
+    date_suffix: {
+      just: '刚刚',
+      min: '分钟前',
+      hour: '小时前',
+      day: '天前',
+      month: '个月前',
+    },
+  };
+
+  // required plugins (only load if needs)
+  stellar.plugins = {
+    jQuery: 'https://fastly.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js'
+  };
+
+  // stellar js
+  stellar.plugins.stellar = Object.assign({"sites":"/js/plugins/sites.js","friends":"/js/plugins/friends.js","ghinfo":"/js/plugins/ghinfo.js","timeline":"/js/plugins/timeline.js","linkcard":"/js/plugins/linkcard.js","fcircle":"/js/plugins/fcircle.js"});
+
+  stellar.plugins.marked = Object.assign("https://cdn.bootcdn.net/ajax/libs/marked/4.0.18/marked.min.js");
+  // optional plugins
+  if ('true' == 'true') {
+    stellar.plugins.lazyload = Object.assign({"enable":true,"js":"https://fastly.jsdelivr.net/npm/vanilla-lazyload@17.3.1/dist/lazyload.min.js","transition":"blur"});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.swiper = Object.assign({"enable":true,"css":"https://unpkg.com/swiper@6/swiper-bundle.min.css","js":"https://unpkg.com/swiper@6/swiper-bundle.min.js"});
+  }
+  if ('' == 'true') {
+    stellar.plugins.scrollreveal = Object.assign({"enable":null,"js":"https://fastly.jsdelivr.net/npm/scrollreveal@4.0.9/dist/scrollreveal.min.js","distance":"8px","duration":500,"interval":100,"scale":1});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.preload = Object.assign({"enable":true,"service":"flying_pages","instant_page":"https://fastly.jsdelivr.net/gh/volantis-x/cdn-volantis@4.1.2/js/instant_page.js","flying_pages":"https://fastly.jsdelivr.net/gh/gijo-varghese/flying-pages@2.1.2/flying-pages.min.js"});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.fancybox = Object.assign({"enable":true,"js":"https://fastly.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.umd.js","css":"https://fastly.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.css","selector":".swiper-slide img"});
+  }
+  if ('false' == 'true') {
+    stellar.plugins.heti = Object.assign({"enable":false,"css":"https://unpkg.com/heti/umd/heti.min.css","js":"https://unpkg.com/heti/umd/heti-addon.min.js"});
+  }
+</script>
+
+<!-- required -->
+
+  
+<script src="/js/main.js" async></script>
+
+
+
+<!-- optional -->
+
+
+
+<!-- inject -->
+
+
+  </div>
+</body>
+</html>
