@@ -482,6 +482,74 @@
       </tags>
   </entry>
   <entry>
+    <title>层叠上下文、层叠水平、层叠顺序与z-index</title>
+    <url>/2023/02/10/%E5%B1%82%E5%8F%A0%E4%B8%8Ez-index/</url>
+    <content><![CDATA[<p>实现按钮效果：在鼠标移入按钮时，按钮的原背景颜色被左侧移入的新背景颜色覆盖，并且不影响按钮中的文字显示。</p>
+<p>如图：</p>
+<p><img src="/images/stacking01.png" alt="图1"></p>
+<p>在这里我很自然就想到了伪元素before和过渡transition，但在设置z-index又出现了问题，要么移入的新背景没有覆盖原背景，要么按钮的文字被新背景覆盖。我就疑惑，z-index的值不是可以设置层叠关系，大的显示在最前面，小的显示在后面吗？</p>
+<p>通过查看别人的博客和《CSS世界》，发现我对层叠关系的理解过于片面，要想正确设置层叠，就必须要理解四点：层叠上下文、层叠水平、层叠顺序与z-index</p>
+<h3 id="层叠上下文"><a href="#层叠上下文" class="headerlink" title="层叠上下文"></a>层叠上下文</h3><p>层叠上下文，是HTML中的一个三维的概念。如果一个元素含有层叠上下文，我们可以理解为这个元素在z轴上就“高人一等”。按照我的理解，z轴就是我们正对着屏幕或网页时，穿透所有元素的一条垂直线，众HTML元素按照一定的优先级在z轴上排列。</p>
+<p><strong>层叠上下文有如下特性</strong>：</p>
+<ul>
+<li><p>层叠上下文的层叠水平要比普通元素高。</p>
+</li>
+<li><p>层叠上下文可以阻断元素的混合模式。</p>
+</li>
+<li><p>层叠上下文可以嵌套，内部层叠上下文及其所有子元素均受制于外部的“层叠上下文”。</p>
+</li>
+<li><p>每个层叠上下文和兄弟元素独立，也就是说，当进行层叠变化或渲染的时候，只需要考虑后代元素。</p>
+</li>
+<li><p>每个层叠上下文是自成体系的，当元素发生层叠的时候，整个元素被认为是在父层叠上下文的层叠顺序中。</p>
+</li>
+</ul>
+<p><strong>层叠上下文的创建</strong>：</p>
+<ul>
+<li>文档根元素（<code>&lt;html&gt;</code>）；</li>
+<li>position值为 <code>absolute</code>（绝对定位）或 <code>relative</code>（相对定位）且z-index值不为 <code>auto</code> 的元素；</li>
+<li>position值为 <code>fixed</code>（固定定位）或 <code>sticky</code>（粘滞定位）的元素（沾滞定位适配所有移动设备上的浏览器，但老的桌面浏览器不支持）；</li>
+<li>flex容器的子元素，且 z-index 值不为 <code>auto</code>；</li>
+<li>grid容器的子元素，且 z-index 值不为 <code>auto</code>；</li>
+<li>opacity属性值小于 <code>1</code> 的元素；</li>
+<li>更多请查看 [<code>MDN文档</code>](<a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/CSS_Positioning/Understanding_z_index/The_stacking_context">层叠上下文 - CSS：层叠样式表 | MDN (mozilla.org)</a>)</li>
+</ul>
+<p><strong>层叠准则</strong>：</p>
+<p>（1）谁大谁上：当具有明显的层叠水平标识的时候，如生效的 z-index 属性值，在同一</p>
+<p>个层叠上下文领域，层叠水平值大的那一个覆盖小的那一个。</p>
+<p>（2）后来居上：当元素的层叠水平一致、层叠顺序相同的时候，在 DOM 流中处于后面的</p>
+<p>元素会覆盖前面的元素。</p>
+<h3 id="层叠水平"><a href="#层叠水平" class="headerlink" title="层叠水平"></a>层叠水平</h3><p>层叠水平决定了同一个层叠上下文中元素在 <em>z</em> 轴上的显示顺序。所有的元素都有层叠水平，包括层叠上下文元素，也包括普通元素。然而，对普通元素的层叠水平探讨只局限在当前层叠上下文元素中.</p>
+<h3 id="层叠顺序"><a href="#层叠顺序" class="headerlink" title="层叠顺序"></a>层叠顺序</h3><p>层叠顺序，表示元素发生层叠时有着特定的垂直显示顺序。</p>
+<p>层叠顺序图：</p>
+<p><img src="/images/stacking03.png" alt="图3"></p>
+<p>一旦普通元素具有层叠上下文，其层叠顺序就会变高。那它的层叠顺序究竟在哪个位置、哪个级别呢？</p>
+<p>这里需要分两种情况讨论：</p>
+<p>（1）如果层叠上下文元素不依赖 z-index 数值，则其层叠顺序是 z-index:auto，可看成 z:index:0 级别；</p>
+<p>（2）如果层叠上下文元素依赖 z-index 数值，则其层叠顺序由 z-index 值决定。</p>
+<p>我们都知道定位元素会层叠在普通元素上面，其背后原因就是：元素一旦成为定位元素，其 z-index 就会自动生效，此时其 z-index 就是默认的 auto，也就是0级别，根据上面的层叠顺序表，就会覆盖inline或block或float元素。</p>
+<h3 id="例子1：定位元素与层叠上下文"><a href="#例子1：定位元素与层叠上下文" class="headerlink" title="例子1：定位元素与层叠上下文"></a>例子1：定位元素与层叠上下文</h3><figure class="highlight html"><table><tr><td class="code"><pre><span class="line">      <span class="comment">&lt;!--图1--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;position:relative; z-index:auto;&quot;</span>&gt;</span></span><br><span class="line">          <span class="comment">&lt;!-- 美女 --&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;na.jpg&quot;</span> <span class="attr">style</span>=<span class="string">&quot;position:absolute; z-index: 2;&quot;</span>&gt;</span>  </span><br><span class="line">      <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;position:relative; z-index:auto;&quot;</span>&gt;</span></span><br><span class="line">          <span class="comment">&lt;!-- 风景 --&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;img1.jpg&quot;</span> <span class="attr">style</span>=<span class="string">&quot;position:relative; z-index: 1;&quot;</span>&gt;</span>  </span><br><span class="line">      <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!--图2--&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;position:relative; z-index:0;&quot;</span>&gt;</span></span><br><span class="line">          <span class="comment">&lt;!-- 美女 --&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;na.jpg&quot;</span> <span class="attr">style</span>=<span class="string">&quot;position:absolute; z-index:2;&quot;</span>&gt;</span>  </span><br><span class="line">      <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;position:relative; z-index:0;&quot;</span>&gt;</span></span><br><span class="line">          <span class="comment">&lt;!-- 风景 --&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;img1.jpg&quot;</span> <span class="attr">style</span>=<span class="string">&quot;position:relative; z-index:1;&quot;</span>&gt;</span>  </span><br><span class="line">      <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>结果如下图所示：</p>
+<p><img src="/images/stacking02.png" alt="图2"></p>
+<p>为什么图1的风景图会被美女图覆盖？为什么图2却是美女图被风景图覆盖？</p>
+<p>先对图1进行分析：包含图片的两个兄弟<code>div</code>(z-index：auto)是一个普通的定位元素，于是，里面的两个<code>img</code>元素的层叠比较就不受父级的影响，并且两个<code>img</code>元素有着明显不一的z-index，因此遵循“谁大谁上”的准则，所以，z-index为2的哪个“美女”就显示在z-index为1的“风景”上面。</p>
+<p>在图2中，z-index的值变成数值，哪怕是0，都会创建一个层叠上下文。此时，层叠规则就发生了变化。两个<code>img</code>元素的层叠顺序比较变成了优先比较其父层叠上下文元素的层叠顺序。这里，由于外面的两个<code>div</code>都是z-index：0，两者层叠顺序一样大，此时遵顼“后来居上”准则，所以，位于后面的“风景”就自然而然显示在“美女”上面，而<code>img</code>元素上的z-index不起作用。</p>
+<h3 id="例子2：z-index负值的使用"><a href="#例子2：z-index负值的使用" class="headerlink" title="例子2：z-index负值的使用"></a>例子2：z-index负值的使用</h3><p>模拟纸张效果，该效果的亮点是纸张的边角有卷起来的效果</p>
+<p><img src="/images/stacking04.png" alt="图4"></p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;container&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;page&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.container</span>&#123;</span><br><span class="line">            <span class="attribute">display</span>: flex;</span><br><span class="line">            <span class="attribute">justify-content</span>: center;</span><br><span class="line">            <span class="attribute">align-items</span>: center;</span><br><span class="line">            <span class="attribute">width</span>: <span class="number">600px</span>;</span><br><span class="line">            <span class="attribute">height</span>: <span class="number">600px</span>;</span><br><span class="line">            <span class="attribute">background</span>: <span class="number">#666</span>;</span><br><span class="line">            <span class="comment">/*创建层叠上下文*/</span></span><br><span class="line">            <span class="attribute">position</span>: relative;</span><br><span class="line">            <span class="attribute">z-index</span>: <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="selector-class">.page</span>&#123;</span><br><span class="line">            <span class="attribute">width</span>: <span class="number">400px</span>;</span><br><span class="line">            <span class="attribute">height</span>: <span class="number">400px</span>;</span><br><span class="line">            <span class="attribute">background</span>: <span class="number">#f5da41</span>;</span><br><span class="line">            <span class="attribute">position</span>: relative;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="selector-class">.page</span><span class="selector-pseudo">:after</span>&#123;</span><br><span class="line">            <span class="attribute">width</span>: <span class="number">30%</span>;</span><br><span class="line">            <span class="attribute">height</span>: <span class="number">20%</span>;</span><br><span class="line">            <span class="attribute">content</span>: <span class="string">&quot;&quot;</span>;</span><br><span class="line">            <span class="attribute">box-shadow</span>: <span class="number">0</span> <span class="number">8px</span> <span class="number">16px</span> <span class="built_in">rgba</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, .<span class="number">3</span>);</span><br><span class="line">            <span class="attribute">position</span>: absolute;</span><br><span class="line">            <span class="attribute">bottom</span>: <span class="number">0</span>;</span><br><span class="line">            <span class="attribute">right</span>: <span class="number">0</span>;</span><br><span class="line">            <span class="comment">/*层叠上下文(灰色背景之上)，定位元素(黄色纸张)之下*/</span></span><br><span class="line">            <span class="attribute">z-index</span>: -<span class="number">1</span>;</span><br><span class="line">            </span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+
+<p>.container 灰色背景通过 position:relative;z-index:0 创建了层叠上下文，.page仅有 position:relative 而没有设置 z-index 值，因此只能算 z-index:auto 程度的定位元素，于是，z-index:-1 边角阴影就完美地藏在了层叠上下文（灰色背景）之上、普通定位元素（黄色纸张）之下。在清楚z-index负值和层叠关系后，文章开头那个按钮效果也可通过z-index负值实现的。</p>
+]]></content>
+      <categories>
+        <category>css案例</category>
+      </categories>
+      <tags>
+        <tag>css</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>JS+CSS手风琴动画效果</title>
     <url>/2023/01/26/%E6%89%8B%E9%A3%8E%E7%90%B4%E5%8A%A8%E7%94%BB%E6%95%88%E6%9E%9C/</url>
     <content><![CDATA[<p>手风琴动画效果：当点击某个选项卡时，该选项卡展示内容，其他选项卡的内容收起，无论展示还是收起都带有过渡效果</p>
