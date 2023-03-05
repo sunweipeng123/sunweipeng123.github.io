@@ -20,13 +20,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="theme-color" content="#f8f8f8">
   
-  <title>分类：前端 - Sunnylog</title>
+  <title>分类：vue - Sunnylog</title>
 
   
     <meta name="description" content="经历一个过程然后成为更好的自己">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Sunnylog">
-<meta property="og:url" content="https://sunweipeng123.github.io/categories/%E5%89%8D%E7%AB%AF/page/2/index.html">
+<meta property="og:url" content="https://sunweipeng123.github.io/categories/vue/index.html">
 <meta property="og:site_name" content="Sunnylog">
 <meta property="og:description" content="经历一个过程然后成为更好的自己">
 <meta property="og:locale" content="zh_CN">
@@ -98,17 +98,21 @@
 
   
 
-<div class="nav-wrap"><nav class="sub post cap"><a href="/">近期发布</a><a class="active" href="/categories">分类：前端</a><a href="/tags">标签</a><a href="/archives">归档</a></nav></div>
+<div class="nav-wrap"><nav class="sub post cap"><a href="/">近期发布</a><a class="active" href="/categories">分类：vue</a><a href="/tags">标签</a><a href="/archives">归档</a></nav></div>
 
-  <div class="post-list post"><a class="post-card post " href="/2022/10/08/pinia/">
-<article class="md"><h2 class="post-title">pinia</h2><div class="excerpt"><p>在vue3+ts的环境下使用pinia
-安装
-1npm install --save pinia
+  <div class="post-list post"><a class="post-card post " href="/2023/03/05/vue3%E6%8F%92%E4%BB%B6/">
+<article class="md"><h2 class="post-title">编写vue3插件,实现一个全局满屏loading</h2><div class="excerpt"><p>
+插件 (Plugins) 是一种能为 Vue 添加全局功能的工具代码。
 
-在mian.ts中
-12345import &#123;createPinia&#125; from &#x27;pinia&#x27;const app = createApp(App)app.use(createPinia())app.mount(&#x27;#app&#x27;)
+插件没有严格定义的使用范围，app.use(xxx)就是在使用插件了。
+官方已经为我们总结出来了，插件发挥作用的常见场景主要包括以下几种：
 
-在s...</p></div><div class="meta cap"><span class="cap" id="post-meta">发布于&nbsp;<time datetime="2022-10-08T12:32:43.000Z">2022-10-08</time></span><span class="cap breadcrumb">前端</span></div></article>
+通过app.component()和app.directive()注册一到多个全局组件或自定义指令。
+通过app.provide()使一个资源可被注入进整个应用
+向app.co...</p></div><div class="meta cap"><span class="cap" id="post-meta">发布于&nbsp;<time datetime="2023-03-05T12:39:13.000Z">2023-03-05</time></span><span class="cap breadcrumb">vue</span></div></article>
+</a><a class="post-card post " href="/2022/12/04/vue-slot/">
+<article class="md"><h2 class="post-title">slot的使用</h2><div class="excerpt"><p>默认插槽假设子组件&lt;son&gt;组件的模版如下：
+1234567891011&lt;div class=&quot;container&quot;&gt;  &lt;header&gt;      &lt;h1&gt;头部&lt;/h1&gt;  &lt;/header&gt;  &lt;main&gt;    &lt;slot&gt;&lt;/slot&gt;  &lt;/main...</p></div><div class="meta cap"><span class="cap" id="post-meta">发布于&nbsp;<time datetime="2022-12-04T12:27:38.000Z">2022-12-04</time></span><span class="cap breadcrumb">vue</span></div></article>
 </a></div>
   
 
