@@ -76,7 +76,7 @@
 <div class="widget-wrap" id="markdown"><div class="widget-header cap theme dis-select"><span class="name">欢迎联系我：1103625855@qq.com</span></div><div class="widget-body fs14"><p><strong>本博客具备以下特点：</strong><br><br><br><strong>引人注目</strong><br><code> </code><br><br><br><strong>恪尽职守</strong><br><code> </code><br><br><br><strong>始终如一</strong></p>
 </div></div>
 
-<div class="widget-wrap" id="recent"><div class="widget-header cap theme dis-select"><span class="name">最近更新</span></div><div class="widget-body related-posts fs14"><a class="item title" href="/2023/04/30/%E5%85%A8%E9%9D%A2%E8%A7%A3%E6%9E%90js%E4%B8%AD%E7%9A%84%E5%8E%9F%E5%9E%8B/"><span class="title">全面解析JavaScript中的原型</span></a><a class="item title" href="/2023/04/15/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/"><span class="title">设计模式之代理模式</span></a><a class="item title" href="/2023/04/15/%E5%85%A8%E9%9D%A2%E8%A7%A3%E6%9E%90js%E4%B8%AD%E7%9A%84%E6%89%A7%E8%A1%8C%E4%B8%8A%E4%B8%8B%E6%96%87/"><span class="title">全面解析JavaScript中的执行上下文</span></a><a class="item title" href="/2023/04/02/%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/"><span class="title">设计模式之状态模式</span></a><a class="item title" href="/2023/04/02/%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/"><span class="title">设计模式之组合模式</span></a></div></div>
+<div class="widget-wrap" id="recent"><div class="widget-header cap theme dis-select"><span class="name">最近更新</span></div><div class="widget-body related-posts fs14"><a class="item title" href="/2023/05/17/%E4%BA%8B%E4%BB%B6%E5%A7%94%E6%89%98/"><span class="title">为什么需要事件委托</span></a><a class="item title" href="/2023/04/30/%E5%85%A8%E9%9D%A2%E8%A7%A3%E6%9E%90js%E4%B8%AD%E7%9A%84%E5%8E%9F%E5%9E%8B/"><span class="title">全面解析JavaScript中的原型</span></a><a class="item title" href="/2023/04/15/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/"><span class="title">设计模式之代理模式</span></a><a class="item title" href="/2023/04/15/%E5%85%A8%E9%9D%A2%E8%A7%A3%E6%9E%90js%E4%B8%AD%E7%9A%84%E6%89%A7%E8%A1%8C%E4%B8%8A%E4%B8%8B%E6%96%87/"><span class="title">全面解析JavaScript中的执行上下文</span></a><a class="item title" href="/2023/04/02/%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/"><span class="title">设计模式之状态模式</span></a></div></div>
 
 
 </div>
@@ -98,7 +98,17 @@
 
 <div class="nav-wrap"><nav class="sub post cap"><a class="active" href="/">近期发布</a><a href="/categories">分类</a><a href="/tags">标签</a><a href="/archives">归档</a></nav></div>
 
-  <div class="post-list post"><a class="post-card post " href="/2023/02/23/%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/">
+  <div class="post-list post"><a class="post-card post " href="/2023/03/05/vue3%E6%8F%92%E4%BB%B6/">
+<article class="md"><h2 class="post-title">编写vue3插件,实现一个全局满屏loading</h2><div class="excerpt"><p>
+插件 (Plugins) 是一种能为 Vue 添加全局功能的工具代码。
+
+插件没有严格定义的使用范围，app.use(xxx)就是在使用插件了。
+官方已经为我们总结出来了，插件发挥作用的常见场景主要包括以下几种：
+
+通过app.component()和app.directive()注册一到多个全局组件或自定义指令。
+通过app.provide()使一个资源可被注入进整个应用
+向app.co...</p></div><div class="meta cap"><span class="cap" id="post-meta">发布于&nbsp;<time datetime="2023-03-05T12:39:13.000Z">2023-03-05</time></span><span class="cap breadcrumb">vue</span></div></article>
+</a><a class="post-card post " href="/2023/02/23/%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/">
 <article class="md"><h2 class="post-title">设计模式之策略模式</h2><div class="excerpt"><p>策略模式的定义是：定义一系列的算法，把它们一个个封装起来，并且使它们可以相互替换。
 策略模式主要用来解决当有多种相似算法的时，使用if…else产生的难以维护的问题。它主要由三部分组成：strategy接口、具体的strategy类以及用来改变和执行策略的context类。其中，Context接受客户的请求，随后把请求委托给某一个策略类。
 使用策略模式计算奖金很多公司的年终奖是根据员工的工资...</p></div><div class="meta cap"><span class="cap" id="post-meta">发布于&nbsp;<time datetime="2023-02-23T06:50:18.000Z">2023-02-23</time></span><span class="cap breadcrumb">设计模式</span></div></article>
@@ -138,9 +148,6 @@
 <article class="md"><h2 class="post-title">脱离脚手架使用vue+elementUI</h2><div class="excerpt"><p>替换主题色
 使用element官方提供的在线主题生成工具，将下载的压缩包解压缩并在页面中引入index.css
 1234&lt;!--将解压缩得到的全部样式放到eleui目录下--&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;./css/eleui/index.css&quot;&gt;&lt;script src=&quot;./js...</p></div><div class="meta cap"><span class="cap" id="post-meta">发布于&nbsp;<time datetime="2022-12-17T14:02:36.000Z">2022-12-17</time></span><span class="cap breadcrumb">前端</span></div></article>
-</a><a class="post-card post " href="/2022/12/04/vue-slot/">
-<article class="md"><h2 class="post-title">slot的使用</h2><div class="excerpt"><p>默认插槽假设子组件&lt;son&gt;组件的模版如下：
-1234567891011&lt;div class=&quot;container&quot;&gt;  &lt;header&gt;      &lt;h1&gt;头部&lt;/h1&gt;  &lt;/header&gt;  &lt;main&gt;    &lt;slot&gt;&lt;/slot&gt;  &lt;/main...</p></div><div class="meta cap"><span class="cap" id="post-meta">发布于&nbsp;<time datetime="2022-12-04T12:27:38.000Z">2022-12-04</time></span><span class="cap breadcrumb">vue</span></div></article>
 </a></div>
   
   <div class='paginator-wrap dis-select'>

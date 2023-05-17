@@ -76,7 +76,7 @@
 <div class="widget-wrap" id="markdown"><div class="widget-header cap theme dis-select"><span class="name">欢迎联系我：1103625855@qq.com</span></div><div class="widget-body fs14"><p><strong>本博客具备以下特点：</strong><br><br><br><strong>引人注目</strong><br><code> </code><br><br><br><strong>恪尽职守</strong><br><code> </code><br><br><br><strong>始终如一</strong></p>
 </div></div>
 
-<div class="widget-wrap" id="recent"><div class="widget-header cap theme dis-select"><span class="name">最近更新</span></div><div class="widget-body related-posts fs14"><a class="item title" href="/2023/04/30/%E5%85%A8%E9%9D%A2%E8%A7%A3%E6%9E%90js%E4%B8%AD%E7%9A%84%E5%8E%9F%E5%9E%8B/"><span class="title">全面解析JavaScript中的原型</span></a><a class="item title" href="/2023/04/15/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/"><span class="title">设计模式之代理模式</span></a><a class="item title" href="/2023/04/15/%E5%85%A8%E9%9D%A2%E8%A7%A3%E6%9E%90js%E4%B8%AD%E7%9A%84%E6%89%A7%E8%A1%8C%E4%B8%8A%E4%B8%8B%E6%96%87/"><span class="title">全面解析JavaScript中的执行上下文</span></a><a class="item title" href="/2023/04/02/%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/"><span class="title">设计模式之状态模式</span></a><a class="item title" href="/2023/04/02/%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/"><span class="title">设计模式之组合模式</span></a></div></div>
+<div class="widget-wrap" id="recent"><div class="widget-header cap theme dis-select"><span class="name">最近更新</span></div><div class="widget-body related-posts fs14"><a class="item title" href="/2023/05/17/%E4%BA%8B%E4%BB%B6%E5%A7%94%E6%89%98/"><span class="title">为什么需要事件委托</span></a><a class="item title" href="/2023/04/30/%E5%85%A8%E9%9D%A2%E8%A7%A3%E6%9E%90js%E4%B8%AD%E7%9A%84%E5%8E%9F%E5%9E%8B/"><span class="title">全面解析JavaScript中的原型</span></a><a class="item title" href="/2023/04/15/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/"><span class="title">设计模式之代理模式</span></a><a class="item title" href="/2023/04/15/%E5%85%A8%E9%9D%A2%E8%A7%A3%E6%9E%90js%E4%B8%AD%E7%9A%84%E6%89%A7%E8%A1%8C%E4%B8%8A%E4%B8%8B%E6%96%87/"><span class="title">全面解析JavaScript中的执行上下文</span></a><a class="item title" href="/2023/04/02/%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/"><span class="title">设计模式之状态模式</span></a></div></div>
 
 
 </div>
@@ -98,12 +98,18 @@
 
 <div class="nav-wrap"><nav class="sub post cap"><a class="active" href="/">近期发布</a><a href="/categories">分类</a><a href="/tags">标签</a><a href="/archives">归档</a></nav></div>
 
-  <div class="post-list post"><a class="post-card post " href="/2023/04/30/%E5%85%A8%E9%9D%A2%E8%A7%A3%E6%9E%90js%E4%B8%AD%E7%9A%84%E5%8E%9F%E5%9E%8B/">
-<article class="md"><h2 class="post-title">全面解析JavaScript中的原型</h2><div class="excerpt"><p>全面解析JavaScript中的原型JavaScript 是一门面向对象的语言，但与其他面向对象语言 Java、python (基于类继承) 不同，它的继承方式是基于原型实现的。
+  <div class="post-list post"><a class="post-card post " href="/2023/05/17/%E4%BA%8B%E4%BB%B6%E5%A7%94%E6%89%98/">
+<article class="md"><h2 class="post-title">为什么需要事件委托</h2><div class="excerpt"><p>什么是事件委托？事件委托的原理又是什么?事件冒泡和事件捕获的区别又在哪里？
+要解答上面三个问题，我们要一步步弄清楚事件机制：事件流 -&gt; 事件冒泡 -&gt; 事件捕获 -&gt; 事件委托
+事件流描述了页面接收事件的顺序。IE 和 Netscape 开发团队提出了几乎完全相
+反的事件流方案。IE 支持事件冒泡流，而 Netscape 支持事件捕获流。
+事件冒泡IE 事件流被称为事件冒...</p></div><div class="meta cap"><span class="cap" id="post-meta">发布于&nbsp;<time datetime="2023-05-17T08:28:07.000Z">2023-05-17</time></span><span class="cap breadcrumb">前端</span></div></article>
+</a><a class="post-card post " href="/2023/04/30/%E5%85%A8%E9%9D%A2%E8%A7%A3%E6%9E%90js%E4%B8%AD%E7%9A%84%E5%8E%9F%E5%9E%8B/">
+<article class="md"><h2 class="post-title">全面解析JavaScript中的原型</h2><div class="excerpt"><p>JavaScript 是一门面向对象的语言，但与其他面向对象语言 Java、python (基于类继承) 不同，它的继承方式是基于原型实现的。
 原型
 几乎每个JavaScript对象都有另一个与之关联的对象，这个对象被称为原型 ( prototype )，第一个对象从这个原型继承属性。 
 
-通过对象字面量创建的所有对象都有相同的原型对象，在JavaScri...</p></div><div class="meta cap"><span class="cap" id="post-meta">发布于&nbsp;<time datetime="2023-04-30T03:45:00.000Z">2023-04-30</time></span><span class="cap breadcrumb">前端</span></div></article>
+通过对象字面量创建的所有对象都有相同的原型对象，在JavaScript代码中可以通过 Object.p...</p></div><div class="meta cap"><span class="cap" id="post-meta">发布于&nbsp;<time datetime="2023-04-30T03:45:00.000Z">2023-04-30</time></span><span class="cap breadcrumb">前端</span></div></article>
 </a><a class="post-card post " href="/2023/04/15/%E5%85%A8%E9%9D%A2%E8%A7%A3%E6%9E%90js%E4%B8%AD%E7%9A%84%E6%89%A7%E8%A1%8C%E4%B8%8A%E4%B8%8B%E6%96%87/">
 <article class="md"><h2 class="post-title">全面解析JavaScript中的执行上下文</h2><div class="excerpt"><p>想要了解作用域，就必须先了解执行上下文。
 变量或函数的上下文决定了它们可以访问哪些数据，以及它们的行为。每个上下文都有一个关联的变量对象（variable object），而这个上下文中定义的所有变量和函数都存在于这个对象上。
@@ -153,16 +159,6 @@ Ctrl+Tab：在工作区切换文件窗口
 Ctrl+B：显示&#x2F;隐藏侧边栏
 Ctrl+&#96;：显示&#x2F;隐藏Terminal
 C...</p></div><div class="meta cap"><span class="cap" id="post-meta">发布于&nbsp;<time datetime="2023-03-05T12:44:38.000Z">2023-03-05</time></span><span class="cap breadcrumb">前端</span></div></article>
-</a><a class="post-card post " href="/2023/03/05/vue3%E6%8F%92%E4%BB%B6/">
-<article class="md"><h2 class="post-title">编写vue3插件,实现一个全局满屏loading</h2><div class="excerpt"><p>
-插件 (Plugins) 是一种能为 Vue 添加全局功能的工具代码。
-
-插件没有严格定义的使用范围，app.use(xxx)就是在使用插件了。
-官方已经为我们总结出来了，插件发挥作用的常见场景主要包括以下几种：
-
-通过app.component()和app.directive()注册一到多个全局组件或自定义指令。
-通过app.provide()使一个资源可被注入进整个应用
-向app.co...</p></div><div class="meta cap"><span class="cap" id="post-meta">发布于&nbsp;<time datetime="2023-03-05T12:39:13.000Z">2023-03-05</time></span><span class="cap breadcrumb">vue</span></div></article>
 </a></div>
   
   <div class='paginator-wrap dis-select'>
